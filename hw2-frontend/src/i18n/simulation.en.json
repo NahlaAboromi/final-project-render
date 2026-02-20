@@ -1,0 +1,21 @@
+{
+  "loading": "Loading…",
+  "loadFailTitle": "Couldn't load the simulation",
+  "loadFailBack": "Back",
+  "headerTitle": "Welcome to the Simulation!",
+  "groupLabel": "Group",
+  "control": "Control",
+  "experimental": "Experimental",
+  "scenarioFallback": "Scenario",
+  "reflectionsTitle": "Question",
+  "writeCombined": "Write your answer here...",
+  "yourResponse": "Write your answer here...",
+  "placeholderCombined": "Type your answer here...",
+  "placeholderSingle": "Type your answer here...",
+  "instructionsText": "Please read the situation carefully and submit your answer below.",
+  "situationTitle": "Simulation Situation",
+  "questionTitle": "Question",
+  "back": "Back",
+  "continue": "Continue",
+  "processing": "Processing…"
+}

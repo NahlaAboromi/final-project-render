@@ -1,0 +1,10 @@
+{
+  "title": "Student Reports",
+  "classCode": "Class Code:",
+  "loadingClass": "Loading class data...",
+  "emptyIcon": "📊",
+  "emptyTitle": "No analyzed student data available",
+  "emptyHint": "Students need to complete simulations before reports can be generated.",
+  "uniqueStudentsPlural": "📚 {n} unique students with analysis data",
+  "uniqueStudentsSingular": "📚 1 unique student with analysis data"
+}

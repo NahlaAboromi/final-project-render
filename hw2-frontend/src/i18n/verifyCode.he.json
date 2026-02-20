@@ -1,0 +1,11 @@
+{
+  "title": "אימות קוד",
+  "subtitle": "הכניסו את הקוד שנשלח אליכם במייל כדי להמשיך.",
+  "fieldEmailLabel": "אימייל",
+  "fieldCodeLabel": "קוד אימות",
+  "fieldCodePlaceholder": "הכניסו קוד בן 6 ספרות",
+  "btnVerify": "אימות",
+  "backToLogin": "חזרה למסך ההתחברות",
+  "errInvalidCode": "קוד שגוי",
+  "errServer": "שגיאת שרת"
+}

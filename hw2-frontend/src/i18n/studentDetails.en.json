@@ -1,0 +1,5 @@
+{
+  "loading": "Loading student data...",
+  "errorPrefix": "Error:",
+  "exportPdf": "Export PDF"
+}

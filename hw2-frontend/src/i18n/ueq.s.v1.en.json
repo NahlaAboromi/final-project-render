@@ -1,0 +1,28 @@
+{
+  "title": "User Experience Questionnaire (UEQ-S)",
+  "subtitle": "Please rate your experience with the system",
+  "progressLabel": "Progress",
+  "submit": "Submit questionnaire",
+  "mustAnswerAll": "Please answer all items before submitting.",
+  "thankYouTitle": "Thank you!",
+  "thankYouBody": "Your responses have been saved successfully.",
+  "pragmaticLabel": "Pragmatic quality",
+  "hedonicLabel": "Hedonic quality",
+  "overallLabel": "Overall score",
+  "err_incomplete": "Please answer all items before submitting.",
+    "intro": "Please rate your experience with the system",
+  "progress": "Progress",
+  "back": "Back",
+  "saving": "Saving...",
+  "thanks": "Thank you! Your responses have been saved successfully.",
+  "dim_pragmatic": "Pragmatic quality",
+  "dim_hedonic": "Hedonic quality",
+    "checkingStatus": "Checking whether you already completed this experience questionnaire...",
+  "alreadyDoneTitle": "Experience questionnaire already completed",
+  "alreadyDoneBody": "You have already completed this experience questionnaire. You can proceed to the final summary.",
+  "goToSummary": "Proceed to summary",
+  "err_load": "The questionnaire could not be loaded. If this appears during the real study, please contact the researcher.",
+  "err_submit": "An error occurred while saving your responses. Please try again."
+
+
+}

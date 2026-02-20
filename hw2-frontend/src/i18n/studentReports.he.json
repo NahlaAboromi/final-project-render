@@ -1,0 +1,10 @@
+{
+  "title": "דוחות סטודנטים",
+  "classCode": "קוד כיתה:",
+  "loadingClass": "טוען נתוני כיתה...",
+  "emptyIcon": "📊",
+  "emptyTitle": "אין נתוני סטודנטים מנותחים",
+  "emptyHint": "סטודנטים צריכים להשלים סימולציות לפני שניתן יהיה להפיק דוחות.",
+  "uniqueStudentsPlural": "📚 {n} סטודנטים ייחודיים עם נתוני ניתוח",
+  "uniqueStudentsSingular": "📚 סטודנט ייחודי 1 עם נתוני ניתוח"
+}

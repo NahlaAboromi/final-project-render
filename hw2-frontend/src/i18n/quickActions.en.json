@@ -1,0 +1,11 @@
+{
+  "createTitle": "Create New Class",
+  "createDesc": "Open a new class and assign an exam directly during setup.",
+  "createBtn": "Start",
+  "manageTitle": "Manage My Classes",
+  "manageDesc": "View students and progress for each class you created.",
+  "manageBtn": "View Classes",
+  "progressTitle": "Student Progress",
+  "progressDesc": "Track students' progress across simulations and view improvements over time.",
+  "progressBtn": "View Progress"
+}

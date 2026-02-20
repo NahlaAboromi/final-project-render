@@ -1,0 +1,9 @@
+{
+  "title": "All Students Progress",
+  "subtitle": "View progress of all students who participated in your classes",
+  "searchPlaceholder": "Search by Student ID...",
+  "searchAria": "Search field by Student ID",
+  "loading": "Loading student data...",
+  "noMatch": "No students match this ID.",
+  "empty": "It looks like no students have joined your classes yet."
+}

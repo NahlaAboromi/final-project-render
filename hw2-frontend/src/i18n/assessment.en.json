@@ -1,0 +1,24 @@
+{
+  "checkingStatus": "Checking status…",
+  "preAlready": "You have already completed the initial (PRE) questionnaire. There is no need to fill it out again.",
+  "postAlready": "You have already completed the final (POST) questionnaire. Thank you for your participation!",
+  "preCompleteTitle": "Initial questionnaire completed",
+  "postCompleteTitle": "Final questionnaire completed",
+  "continueToSimulation": "Continue to simulation",
+  "backToHome": "Back to home",
+  "goToFinalReflection": "Continue to final reflection",
+  "goToSummary": "Continue to Experience Questionnaire",
+  "savedSecurely": "Your answers have been saved securely.",
+  "loadingQuestionnaire": "Loading questionnaire…",
+  "couldntLoad": "Couldn't load the questionnaire",
+  "noItemsFound": "No questions found.",
+  "retry": "Retry",
+  "previous": "Previous",
+  "next": "Next",
+  "tooFast": "You're responding too quickly — please slow down 🙂",
+  "finishModal": {
+    "title": "You’ve finished the questionnaire!",
+    "body": "You answered {{count}} questions. Click the button below to view your results.",
+    "cta": "View results"
+  }
+}

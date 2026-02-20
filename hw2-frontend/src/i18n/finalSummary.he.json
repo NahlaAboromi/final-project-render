@@ -1,0 +1,12 @@
+{
+  "thanksTitle": "תודה על השתתפותך במחקר!",
+  "thanksSub": "Casely הכינה סיכום קצר של החוויה שלך.",
+  "summaryTitle": "סיכום כללי",
+  "back": "חזרה",
+  "loading": "טוען את הסיכום השמור…",
+  "noSummary": "לא נמצא סיכום.",
+  "continueCta": "להמשך לשאלון המאומת →",
+  "loadFailed": "נכשל בטעינת הסיכום השמור.",
+  "missingAnonId": "חסר anonId.",
+  "loadError": "שגיאת טעינה"
+}

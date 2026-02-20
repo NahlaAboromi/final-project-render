@@ -1,0 +1,10 @@
+{
+  "title": "Manage My Classes",
+  "subtitle": "View and manage all your classes and student progress in one place",
+  "searchPlaceholder": "Search classes by name...",
+  "codePlaceholder": "Class Code...",
+  "loading": "Loading classes...",
+  "errorBox": "An error occurred while loading classes.",
+  "empty": "No classes found.",
+  "createBtn": "Create New Class"
+}

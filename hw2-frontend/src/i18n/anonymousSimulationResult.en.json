@@ -1,0 +1,16 @@
+{
+  "title": "Simulation Completed Successfully!",
+  "preparing": "Preparing your results…",
+  "back": "Back",
+  "groupLabel": "Group",
+  "groupMetaControl": "Control",
+  "groupMetaExp": "Experimental",
+  "vqBtn": "Continue to Validated Questionnaire",
+  "chatTitle": "Conversation with Casely 🤖",
+  "chatLead": "Now you’ll begin a short reflection chat with Casely — our Socratic AI coach. Casely will ask you a few gentle questions to help you think about your decisions and emotions during the simulation. There are no right or wrong answers — just be honest and reflective.\n\nWhen you finish your chat, Casely will give you a short personalized summary paragraph. After that, you’ll automatically continue to the validated questionnaire (Post stage).",
+  "finishToContinue": "Finish the conversation to continue.",
+  "missingAnon": "Missing anonId.",
+  "failAnalysis": "Failed to fetch analysis.",
+  "failTrialMeta": "Failed to fetch trial meta.",
+  "couldntLoad": "Couldn’t load the results"
+}

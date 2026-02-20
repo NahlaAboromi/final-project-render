@@ -1,0 +1,16 @@
+{
+  "attempt": "Attempt",
+  "firstToLast": "First → Last Score",
+  "improvement": "improvement",
+  "progressOverTime": "Progress Over Time",
+  "noChart": "No progress chart available – only one attempt was submitted",
+  "basedOnLatest": "Based on the latest simulation attempt",
+  "selfAwareness": "Self Awareness",
+  "selfManagement": "Self Management",
+  "socialAwareness": "Social Awareness",
+  "relationshipSkills": "Relationship Skills",
+  "decisionMakingShort": "Decision Making",
+  "unknown": "Unknown",
+  "attemptsOne": "attempt",
+  "attemptsMany": "attempts"
+}

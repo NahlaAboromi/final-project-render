@@ -1,0 +1,16 @@
+{
+  "title": "Lecturer Login",
+  "subtitle": "Sign in to manage classes and view student performance.",
+  "altEducator": "Educator",
+  "fieldIdLabel": "ID",
+  "fieldIdPlaceholder": "Enter your ID",
+  "fieldPasswordLabel": "Password",
+  "fieldPasswordPlaceholder": "Enter your password",
+  "forgot": "Forgot your password?",
+  "btnSignIn": "Sign in",
+  "noAccount": "Don't have an account?",
+  "registerNow": "Register now",
+  "errFillBoth": "Please fill in both ID and Password.",
+  "errLoginFailed": "Login failed.",
+  "errLoginGeneric": "Login error. Please try again later."
+}

@@ -1,0 +1,16 @@
+{
+  "attempt": "ניסיון",
+  "firstToLast": "ציון ראשון → אחרון",
+  "improvement": "שיפור",
+  "progressOverTime": "מגמת התקדמות לאורך זמן",
+  "noChart": "אין גרף התקדמות — הוגש רק ניסיון אחד",
+  "basedOnLatest": "מבוסס על ניסיון הסימולציה האחרון",
+  "selfAwareness": "מודעות עצמית",
+  "selfManagement": "ניהול עצמי",
+  "socialAwareness": "מודעות חברתית",
+  "relationshipSkills": "מיומנויות בינאישיות",
+  "decisionMakingShort": "קבלת החלטות אחראית",
+  "unknown": "לא ידוע",
+  "attemptsOne": "ניסיון",
+  "attemptsMany": "ניסיונות"
+}

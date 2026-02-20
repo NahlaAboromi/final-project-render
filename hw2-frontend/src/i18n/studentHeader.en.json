@@ -1,0 +1,6 @@
+{
+  "unknown": "Unknown Student",
+  "studentId": "Student ID:",
+  "simulationsOne": "📊 1 Simulation Completed",
+  "simulationsMany": "📊 {n} Simulations Completed"
+}

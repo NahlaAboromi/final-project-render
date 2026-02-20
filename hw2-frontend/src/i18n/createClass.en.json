@@ -1,0 +1,15 @@
+{
+  "title": "Create a New Class",
+  "infoAria": "How it works info",
+  "infoTitle": "How it works",
+  "lead": "Create a class with AI-generated situational questions that analyze student responses using the CASEL 5 framework.",
+  "popup": {
+    "title": "How it works:",
+    "p1": "After entering class details, our AI will generate a short scenario with a question. You can review and regenerate if needed before creating the class.",
+    "li1": "AI generates a short situational scenario (~50 words)",
+    "li2": "It creates an open-ended question for students",
+    "li3": "Student responses will be analyzed using the CASEL 5 framework",
+    "li4": "You’ll receive detailed reports on each student’s social-emotional competencies",
+    "close": "Close"
+  }
+}

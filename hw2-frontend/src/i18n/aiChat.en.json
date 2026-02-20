@@ -1,0 +1,12 @@
+{
+  "title": "Ask the AI",
+  "tooltip": "Ask the AI",
+  "greeting": "Hi! I'm your AI assistant. You can ask me anything about your students, classes — or general education topics!\n\nExamples:\n- \"What’s the summary for Class B?\"\n- \"Which students are struggling?\"\n- \"What is SEL and why is it important?\"",
+  "labelAI": "AI",
+  "labelYou": "You",
+  "placeholder": "Type your message...",
+  "ask": "Ask",
+  "asking": "...",
+  "fallback": "Something went wrong.",
+  "errGeneric": "Error contacting AI."
+}

@@ -1,0 +1,60 @@
+{
+  "steps": {
+    "step1": "1. Class Details",
+    "step2": "2. Review & Create"
+  },
+  "labels": {
+    "classCode": "Class Code:",
+    "className": "Class Name:",
+    "selectTopic": "Select Topic:"
+  },
+  "hints": {
+    "chooseOrCustom": "Choose from the topic list or create your own custom topic",
+    "customExplain": "Enter any social-emotional topic you'd like the AI to create a situation about"
+  },
+  "tabs": {
+    "fromList": "Select from List",
+    "custom": "Enter Custom Topic"
+  },
+  "dropdown": {
+    "selectPlaceholder": "-- Select a topic --",
+    "groupTopics": "Topics"
+  },
+  "topics": {
+    "teamwork": "Teamwork",
+    "conflictResolution": "Conflict Resolution",
+    "empathy": "Empathy",
+    "emotionalIntelligence": "Emotional Intelligence",
+    "communication": "Communication Skills",
+    "leadership": "Leadership",
+    "stressManagement": "Stress Management",
+    "culturalAwareness": "Cultural Awareness"
+  },
+  "placeholders": {
+    "classCode": "e.g. SEL2025-A",
+    "className": "e.g. Social Emotional Learning 101",
+    "customTopic": "Enter any topic (e.g., 'Public Speaking Anxiety', 'Cross-cultural Communication')"
+  },
+  "buttons": {
+    "generate": "Generate Situation",
+    "generating": "Generating Situation...",
+    "regenerate": "Regenerate Situation",
+    "regenerating": "Regenerating...",
+    "approveCreate": "Approve & Create Class",
+    "creating": "Creating Class...",
+    "backToEdit": "Back to Edit Details"
+  },
+  "review": {
+    "title": "Review Situation",
+    "situation": "Situation:",
+    "question": "Question:",
+    "noSituation": "No situation generated yet.",
+    "noQuestion": "No question generated yet."
+  },
+  "toasts": {
+    "fillAll": "Please fill in all required fields.",
+    "failGenerate": "Failed to generate situation",
+    "classCreated": "Class created successfully!",
+    "error": "Error"
+  }
+}

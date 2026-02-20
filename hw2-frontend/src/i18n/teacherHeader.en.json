@@ -1,0 +1,13 @@
+{
+  "home": "Home",
+  "myClasses": "My Classes",
+  "reports": "Student Progress Overview",
+  "createClass": "Create Class",
+  "notifications": "Notifications",
+  "markAllAsRead": "Mark all as read",
+  "loadingNotifications": "Loading notifications...",
+  "noNotifications": "No notifications",
+  "user": "User",
+  "teacher": "Lecturer",
+  "logout": "Logout"
+}

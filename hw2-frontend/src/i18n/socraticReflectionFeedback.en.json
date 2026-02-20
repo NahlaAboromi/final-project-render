@@ -1,0 +1,15 @@
+{
+  "cardTitle": "Final Reflection",
+  "cardSub": "Before we end, please share your experience with Casely, your Socratic coach",
+  "q1": "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
+  "q2": "Overall, do you feel that talking with Casely was useful or meaningful to you?",
+  "ph1": "Share your thoughts here...",
+  "ph2": "You can explain why or why not...",
+  "chars": "characters",
+  "saving": "Saving…",
+  "finishContinue": "Finish & Continue",
+  "mustAnswer": "Please answer both questions to continue",
+  "thanksNote": "Thank you for taking the time to reflect on your experience 🙏",
+  "errMissing": "Missing anonId — make sure the anonymous student context is available.",
+  "errSave": "Saving failed. Please try again."
+}

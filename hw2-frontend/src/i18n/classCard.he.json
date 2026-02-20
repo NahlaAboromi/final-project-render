@@ -1,0 +1,40 @@
+{
+  "misc": {
+    "unknown": "לא ידוע"
+  },
+  "header": {
+    "created": "נוצר"
+  },
+  "badges": {
+    "active": "פעילה",
+    "students_en": "Students",
+    "students_he": "סטודנטים"
+  },
+  "empty": {
+    "noStudents": "עדיין אין סטודנטים בכיתה זו"
+  },
+  "stats": {
+    "attemptsTitle": "סיכום נסיונות סימולציה",
+    "attempts_en": "Attempts",
+    "attempts_he": "נסיונות",
+    "completedBy_en": { "prefix": "completed by", "suffix": "unique students" },
+    "completedBy_he": { "prefix": "הושלמו על ידי", "suffix": "סטודנטים ייחודיים" },
+    "avgSelTitle": "ציון SEL ממוצע",
+    "avgSelLabel": "ממוצע SEL"
+  },
+  "actions": {
+    "view": "צפייה בפרטים",
+    "reports": "דוחות סטודנטים",
+    "delete": "מחיקה"
+  },
+  "modal": {
+    "title": "מחיקת כיתה",
+    "desc": "האם את/ה בטוח/ה שברצונך למחוק את הכיתה? לא ניתן לבטל פעולה זו.",
+    "confirm": "מחק",
+    "cancel": "בטל"
+  },
+  "toasts": {
+    "deleteError": "שגיאה במחיקת הכיתה",
+    "serverError": "שגיאת שרת"
+  }
+}

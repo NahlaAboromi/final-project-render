@@ -1,0 +1,12 @@
+{
+  "thanksTitle": "Thank you for participating in our study!",
+  "thanksSub": "Casely prepared a short summary of your experience.",
+  "summaryTitle": "Overall Summary",
+  "back": "Back",
+  "loading": "Loading your saved summary…",
+  "noSummary": "No summary available.",
+  "continueCta": "Continue to Validated Questionnaire →",
+  "loadFailed": "Failed to load saved summary.",
+  "missingAnonId": "Missing anonId.",
+  "loadError": "Load error"
+}

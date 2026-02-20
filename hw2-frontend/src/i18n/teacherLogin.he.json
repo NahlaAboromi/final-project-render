@@ -1,0 +1,16 @@
+{
+  "title": "כניסת מרצה",
+  "subtitle": "התחברות לניהול כיתות וצפייה בביצועי הסטודנטים.",
+  "altEducator": "מרצה",
+  "fieldIdLabel": "תעודת זהות / מזהה",
+  "fieldIdPlaceholder": "הכניסו מזהה",
+  "fieldPasswordLabel": "סיסמה",
+  "fieldPasswordPlaceholder": "הכניסו סיסמה",
+  "forgot": "שכחת סיסמה?",
+  "btnSignIn": "התחברות",
+  "noAccount": "אין לך חשבון?",
+  "registerNow": "להרשמה",
+  "errFillBoth": "נא למלא גם מזהה וגם סיסמה.",
+  "errLoginFailed": "ההתחברות נכשלה.",
+  "errLoginGeneric": "שגיאת התחברות. נסו שוב מאוחר יותר."
+}

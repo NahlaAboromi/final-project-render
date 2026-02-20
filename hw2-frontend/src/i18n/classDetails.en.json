@@ -1,0 +1,8 @@
+{
+  "title": "Class Details",
+  "classCodeLabel": "Class Code:",
+  "loading": "Loading class information...",
+  "aiInsightTitle": "🧠 AI Insight for the Class:",
+  "studentsNotArray": "⚠️ students is not an array",
+  "aiServerError": "❌ Server error while requesting class insight."
+}

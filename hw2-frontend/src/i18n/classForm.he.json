@@ -1,0 +1,60 @@
+{
+  "steps": {
+    "step1": "1. פרטי כיתה",
+    "step2": "2. סקירה ויצירה"
+  },
+  "labels": {
+    "classCode": "קוד כיתה:",
+    "className": "שם כיתה:",
+    "selectTopic": "בחירת נושא:"
+  },
+  "hints": {
+    "chooseOrCustom": "בחרו מרשימת הנושאים או הגדירו נושא מותאם אישית",
+    "customExplain": "הקלידו כל נושא חברתי-רגשי שתרצו שה-AI ייצור עליו תרחיש"
+  },
+  "tabs": {
+    "fromList": "בחירה מהרשימה",
+    "custom": "הזנת נושא מותאם"
+  },
+  "dropdown": {
+    "selectPlaceholder": "-- בחרו נושא --",
+    "groupTopics": "נושאים"
+  },
+  "topics": {
+    "teamwork": "עבודת צוות",
+    "conflictResolution": "יישוב קונפליקטים",
+    "empathy": "אמפתיה",
+    "emotionalIntelligence": "אינטליגנציה רגשית",
+    "communication": "מיומנויות תקשורת",
+    "leadership": "מנהיגות",
+    "stressManagement": "התמודדות עם לחץ",
+    "culturalAwareness": "מודעות בין-תרבותית"
+  },
+  "placeholders": {
+    "classCode": "למשל: SEL2025-A",
+    "className": "למשל: מבוא ל-SEL",
+    "customTopic": "לדוגמה: חרדת דיבור מול קהל, תקשורת בין-תרבותית"
+  },
+  "buttons": {
+    "generate": "יצירת תרחיש",
+    "generating": "יוצר תרחיש...",
+    "regenerate": "יצירת תרחיש מחדש",
+    "regenerating": "יוצר מחדש...",
+    "approveCreate": "אישור ויצירת כיתה",
+    "creating": "יוצר כיתה...",
+    "backToEdit": "חזרה לעריכת פרטים"
+  },
+  "review": {
+    "title": "סקירת התרחיש",
+    "situation": "תרחיש:",
+    "question": "שאלה:",
+    "noSituation": "עדיין לא נוצר תרחיש.",
+    "noQuestion": "עדיין לא נוצרה שאלה."
+  },
+  "toasts": {
+    "fillAll": "נא למלא את כל השדות החיוניים.",
+    "failGenerate": "נכשל ביצירת התרחיש",
+    "classCreated": "הכיתה נוצרה בהצלחה!",
+    "error": "שגיאה"
+  }
+}

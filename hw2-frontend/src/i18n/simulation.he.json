@@ -1,0 +1,21 @@
+{
+  "loading": "טוען…",
+  "loadFailTitle": "לא ניתן לטעון את הסימולציה",
+  "loadFailBack": "חזרה",
+  "headerTitle": "ברוכים הבאים לסימולציה!",
+  "groupLabel": "קבוצה",
+  "control": "ביקורת",
+  "experimental": "ניסוי",
+  "scenarioFallback": "תרחיש",
+  "reflectionsTitle": "שאלות",
+  "writeCombined": "כתוב את התשובה שלך כאן...",
+  "yourResponse": "כתוב את התשובה שלך כאן...",
+  "placeholderCombined": "הקלד את תשובתך כאן...",
+  "placeholderSingle": "הקלד את תשובתך כאן...",
+  "instructionsText": "נא לקרוא את הסימולציה  בעיון ולהגיש את התשובה למטה.",
+  "situationTitle": " הסימולציה",
+  "questionTitle": "שאלות",
+  "back": "חזרה",
+  "continue": "המשך",
+  "processing": "מעבד…"
+}

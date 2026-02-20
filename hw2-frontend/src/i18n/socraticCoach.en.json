@@ -1,0 +1,15 @@
+{
+  "title": "Hi! I'm your Socratic Coach ✋",
+  "missingAnonId": "Missing anonId",
+  "initFailed": "Init failed",
+  "initError": "Init error",
+  "sendFailed": "Send failed",
+  "sendError": "Send error",
+  "finalizeError": "Failed to finalize conversation",
+  "aiSummaryFailed": "AI summary failed",
+  "inputPlaceholder": "Type your reply…",
+  "send": "Send",
+  "finish": "Finish",
+  "processing": "Processing…",
+  "hintBeforeFinish": "The \"Continue to Validated Questionnaire\" button will enable after you click \"Finish\"."
+}

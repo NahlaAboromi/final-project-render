@@ -1,0 +1,11 @@
+{
+  "title": "Verify Code",
+  "subtitle": "Enter the code sent to your email to continue.",
+  "fieldEmailLabel": "Email Address",
+  "fieldCodeLabel": "Verification Code",
+  "fieldCodePlaceholder": "Enter the 6-digit code",
+  "btnVerify": "Verify",
+  "backToLogin": "Back to Login",
+  "errInvalidCode": "Invalid code",
+  "errServer": "Server error"
+}

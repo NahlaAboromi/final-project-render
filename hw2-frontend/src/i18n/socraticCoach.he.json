@@ -1,0 +1,15 @@
+{
+  "title": "היי! אני המדריך הסוקרטי שלך ✋",
+  "missingAnonId": "חסר anonId",
+  "initFailed": "האיתחול נכשל",
+  "initError": "שגיאת איתחול",
+  "sendFailed": "שליחה נכשלה",
+  "sendError": "שגיאת שליחה",
+  "finalizeError": "נכשל בסיום השיחה",
+  "aiSummaryFailed": "יצירת סיכום AI נכשלה",
+  "inputPlaceholder": "הקלד/י את תגובתך…",
+  "send": "שליחה",
+  "finish": "סיום",
+  "processing": "מעבד…",
+  "hintBeforeFinish": "כפתור \"המשך לשאלון המאומת\" יופעל לאחר לחיצה על \"סיום\"."
+}

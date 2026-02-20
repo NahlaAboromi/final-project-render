@@ -1,0 +1,40 @@
+{
+  "misc": {
+    "unknown": "Unknown"
+  },
+  "header": {
+    "created": "Created"
+  },
+  "badges": {
+    "active": "Active",
+    "students_en": "Student",
+    "students_he": "Students"
+  },
+  "empty": {
+    "noStudents": "No students in this class yet"
+  },
+  "stats": {
+    "attemptsTitle": "Simulation Attempts Summary",
+    "attempts_en": "Attempt",
+    "attempts_he": "נסיונות",
+    "completedBy_en": { "prefix": "completed by", "suffix": "unique student" },
+    "completedBy_he": { "prefix": "הושלמו על ידי", "suffix": "סטודנטים ייחודיים" },
+    "avgSelTitle": "Average SEL Score",
+    "avgSelLabel": "SEL Average"
+  },
+  "actions": {
+    "view": "View Details",
+    "reports": "Student Reports",
+    "delete": "Delete"
+  },
+  "modal": {
+    "title": "Delete Class",
+    "desc": "Are you sure you want to delete this class? This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "toasts": {
+    "deleteError": "Error deleting class",
+    "serverError": "Server error"
+  }
+}
