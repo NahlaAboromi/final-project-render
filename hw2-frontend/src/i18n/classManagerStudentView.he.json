@@ -1,0 +1,15 @@
+{
+  "title": "סימולציות שבוצעו",
+  "searchPlaceholder": "חיפוש לפי שם כיתה...",
+  "classCodePlaceholder": "קוד כיתה...",
+  "loading": "טוען כיתות...",
+  "empty": "לא נמצאו כיתות.",
+  "codeLabel": "קוד",
+  "subjectLabel": "נושא",
+  "viewDetails": "צפייה בפרטים",
+  "errors": {
+    "noUserId": "לא נמצא מזהה משתמש.",
+    "fetchFailed": "נכשל להביא כיתות.",
+    "serverError": "שגיאת שרת."
+  }
+}

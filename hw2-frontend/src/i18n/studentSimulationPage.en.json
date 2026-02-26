@@ -1,0 +1,26 @@
+{
+  "loading": "Loading simulation...",
+  "welcome": "Welcome to the Simulation!",
+  "instructions": "Please read the situation carefully and submit your answer below.",
+  "simulationSituation": "Simulation Situation",
+  "questionLabel": "Question:",
+  "placeholder": "Write your answer here...",
+  "submit": "Submit Simulation",
+  "submitting": "Submitting Simulation",
+
+  "toast": {
+    "success": "✅ Your answer has been submitted successfully!"
+  },
+
+  "notif": {
+    "title": "Simulation Submitted",
+    "content": "Simulation of the class {classCode} submitted successfully."
+  },
+
+  "errors": {
+    "classNotFound": "Class not found. Please try again.",
+    "serverError": "Server error. Please try again later.",
+    "submitError": "Error submitting answer. Please try again.",
+    "serverErrorShort": "Server error. Please try again."
+  }
+}

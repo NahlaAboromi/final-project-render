@@ -6,6 +6,71 @@ export async function loadDict(ns, lang) {
   if (cache[key]) return cache[key];
   let mod;
   switch (ns) {
+    case 'studentHeaderNav':
+  mod = lang === 'he'
+    ? await import('../i18n/studentHeaderNav.he.json')
+    : await import('../i18n/studentHeaderNav.en.json');
+  break;
+case 'classDetailsStudent':
+  mod = lang === 'he'
+    ? await import('../i18n/classDetailsStudent.he.json')
+    : await import('../i18n/classDetailsStudent.en.json');
+  break;
+  case 'classManagerStudentView':
+  mod = lang === 'he'
+    ? await import('../i18n/classManagerStudentView.he.json')
+    : await import('../i18n/classManagerStudentView.en.json');
+  break;
+  case 'studentAnswerAnalysis':
+  mod = lang === 'he'
+    ? await import('../i18n/studentAnswerAnalysis.he.json')
+    : await import('../i18n/studentAnswerAnalysis.en.json');
+  break;
+  case 'studentHome':
+  mod = lang === 'he'
+    ? await import('../i18n/studentHome.he.json')
+    : await import('../i18n/studentHome.en.json');
+  break;
+  case 'simulationResult':
+  mod = lang === 'he'
+    ? await import('../i18n/simulationResult.he.json')
+    : await import('../i18n/simulationResult.en.json');
+  break;
+  case 'studentLogin':
+  mod = lang === 'he'
+    ? await import('../i18n/studentLogin.he.json')
+    : await import('../i18n/studentLogin.en.json');
+  break;
+  case 'studentSimulationBox':
+  mod = lang === 'he'
+    ? await import('../i18n/studentSimulationBox.he.json')
+    : await import('../i18n/studentSimulationBox.en.json');
+  break;
+  case 'studentSimulationPage':
+  mod = lang === 'he'
+    ? await import('../i18n/studentSimulationPage.he.json')
+    : await import('../i18n/studentSimulationPage.en.json');
+  break;
+  case 'studentAiChat':
+  mod = lang === 'he'
+    ? await import('../i18n/studentAiChat.he.json')
+    : await import('../i18n/studentAiChat.en.json');
+  break;
+  case 'classManagerStudent':
+  mod = lang === 'he'
+    ? await import('../i18n/classManagerStudent.he.json')
+    : await import('../i18n/classManagerStudent.en.json');
+  break;
+  case 'studentRecentActivity':
+  mod = lang === 'he'
+    ? await import('../i18n/studentRecentActivity.he.json')
+    : await import('../i18n/studentRecentActivity.en.json');
+  break;
+  case 'myProgressStudent':
+  mod = lang === 'he'
+    ? await import('../i18n/myProgressStudent.he.json')
+    : await import('../i18n/myProgressStudent.en.json');
+  break;
      case 'teacherHeader':
       mod = lang === 'he'
         ? await import('../i18n/teacherHeader.he.json')

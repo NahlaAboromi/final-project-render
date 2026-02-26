@@ -1,0 +1,9 @@
+{
+  "classDetails": "Class Details",
+  "classCode": "Class Code",
+  "filterSubmissions": "Filter Submissions",
+  "filterByDate": "Filter by submission date:",
+  "clear": "Clear",
+  "noSubmissionsForDate": "No simulation submissions found for the selected date.",
+  "loadingClassInfo": "Loading class information..."
+}

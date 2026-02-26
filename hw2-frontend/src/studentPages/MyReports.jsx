@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import StudentHeader from './StudentHeader';
@@ -8,21 +7,21 @@ import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
 import StudentSimulationBox from './StudentSimulationBox';
 import AnswerCard from './AnswerCard';
 import { useLocation } from 'react-router-dom';
-import StudentAIChat from '../AI/StudentAIChat'; 
-
+import StudentAIChat from '../AI/StudentAIChat';
+import { useI18n } from '../utils/i18n';
 
 const ClassDetailsContent = () => {
   const { theme } = useContext(ThemeContext);
   const isDark = theme === 'dark';
   const location = useLocation();
   const { classCode } = location.state || {};
-  const { user } = useContext(UserContext); 
+  const { user } = useContext(UserContext);
+
+  const { t, dir, lang } = useI18n('classDetailsStudent');
 
   const [classInfo, setClassInfo] = useState(null);
   const [searchDate, setSearchDate] = useState('');
 
-  
-  
   // Fetch class information from backend when component mounts or classCode changes
   useEffect(() => {
     const fetchClassInfo = async () => {
@@ -39,7 +38,6 @@ const ClassDetailsContent = () => {
     fetchClassInfo();
   }, [classCode]);
 
-
   // Convert any date string to Israel local date in format YYYY-MM-DD
   const formatDateToIsraelTime = (dateString) => {
     const date = new Date(dateString);
@@ -55,7 +53,11 @@ const ClassDetailsContent = () => {
   };
 
   return (
-    <div className={`flex flex-col min-h-screen w-screen ${isDark ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-800'}`}>
+    <div
+      dir={dir}
+      lang={lang}
+      className={`flex flex-col min-h-screen w-screen ${isDark ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-800'}`}
+    >
       {/* Header */}
       <div className="px-4 mt-4">
         <StudentHeader />
@@ -66,10 +68,11 @@ const ClassDetailsContent = () => {
         {/* Class header info */}
         <div className={`${isDark ? 'bg-slate-700' : 'bg-slate-200'} p-6 rounded mb-4`}>
           <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
-            <span role="img" aria-label="book">📘</span> Class Details
+            <span role="img" aria-label="book">📘</span> {t('classDetails', 'Class Details')}
           </h1>
           <p className="text-lg">
-            Class Code: <span className="bg-gray-100 dark:bg-slate-600 px-3 py-1 rounded font-mono">{classCode}</span>
+            {t('classCode', 'Class Code')}:{" "}
+            <span className="bg-gray-100 dark:bg-slate-600 px-3 py-1 rounded font-mono">{classCode}</span>
           </p>
         </div>
 
@@ -85,13 +88,13 @@ const ClassDetailsContent = () => {
             {/* Filter submissions by date */}
             <div className={`${isDark ? 'bg-slate-700' : 'bg-white'} p-4 rounded-lg shadow mb-6`}>
               <h2 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                <span role="img" aria-label="filter">🔍</span> Filter Submissions
+                <span role="img" aria-label="filter">🔍</span> {t('filterSubmissions', 'Filter Submissions')}
               </h2>
 
               {/* Date input for filtering */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
                 <label htmlFor="searchDate" className="font-medium">
-                  Filter by submission date:
+                  {t('filterByDate', 'Filter by submission date:')}
                 </label>
 
                 <input
@@ -108,7 +111,7 @@ const ClassDetailsContent = () => {
                     onClick={() => setSearchDate('')}
                     className="text-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
                   >
-                    Clear
+                    {t('clear', 'Clear')}
                   </button>
                 )}
               </div>
@@ -125,7 +128,8 @@ const ClassDetailsContent = () => {
                       return submittedDate === searchDate;
                     })
                   : studentAnswers;
-                  console.log(filteredAnswers);
+
+                console.log(filteredAnswers);
 
                 // Render answers or message if none found
                 return filteredAnswers.length > 0 ? (
@@ -135,18 +139,20 @@ const ClassDetailsContent = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-slate-500 italic">No simulation submissions found for the selected date.</p>
+                  <p className="text-slate-500 italic">
+                    {t('noSubmissionsForDate', 'No simulation submissions found for the selected date.')}
+                  </p>
                 );
               })()}
             </div>
           </>
         ) : (
-          <p>Loading class information...</p>
+          <p>{t('loadingClassInfo', 'Loading class information...')}</p>
         )}
       </main>
 
       {/* Floating AI chat button for logged-in users */}
-      {user?.id && <StudentAIChat studentId={user.id} studentName={user.username}/>}
+      {user?.id && <StudentAIChat studentId={user.id} studentName={user.username} />}
 
       {/* Footer */}
       <div className="px-4 pb-4">

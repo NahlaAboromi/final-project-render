@@ -1,0 +1,9 @@
+{
+  "classDetails": "פרטי כיתה",
+  "classCode": "קוד כיתה",
+  "filterSubmissions": "סינון הגשות",
+  "filterByDate": "סינון לפי תאריך הגשה:",
+  "clear": "נקה",
+  "noSubmissionsForDate": "לא נמצאו הגשות סימולציה בתאריך שנבחר.",
+  "loadingClassInfo": "טוען פרטי כיתה..."
+}

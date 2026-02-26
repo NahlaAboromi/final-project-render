@@ -1,3 +1,4 @@
+// src/studentPages/StudentSimulation.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ThemeProvider, ThemeContext } from '../DarkLightMood/ThemeContext';
@@ -5,6 +6,7 @@ import StudentHeader from "../studentPages/StudentHeader";
 import { UserContext } from '../context/UserContext';
 import { StudentNotificationsContext } from '../context/StudentNotificationsContext';
 import Footer from "../layout/Footer";
+import { useI18n } from '../utils/i18n'; // ✅ i18n
 
 const StudentSimulation = () => {
   const location = useLocation();
@@ -14,6 +16,9 @@ const StudentSimulation = () => {
   const isDark = theme === 'dark';
   const { user } = useContext(UserContext);
   const { fetchNotifications } = useContext(StudentNotificationsContext);
+
+  // ✅ i18n (שם חדש כדי לא להתנגש)
+  const { t, dir, lang, ready } = useI18n('studentSimulationPage');
 
   const [situation, setSituation] = useState('');
   const [question, setQuestion] = useState('');
@@ -40,12 +45,12 @@ const StudentSimulation = () => {
           setQuestion(data.question);
         } else {
           console.error('❌ Error fetching class data:', data.message);
-          alert('Class not found. Please try again.');
+          alert(t('errors.classNotFound'));
           navigate('/StudentHome');
         }
       } catch (error) {
         console.error('❌ Server error:', error);
-        alert('Server error. Please try again later.');
+        alert(t('errors.serverError'));
         navigate('/StudentHome');
       } finally {
         setLoading(false);
@@ -57,7 +62,7 @@ const StudentSimulation = () => {
     } else {
       navigate('/StudentHome');
     }
-  }, [classCode, navigate]);
+  }, [classCode, navigate, t]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,8 +88,9 @@ const StudentSimulation = () => {
         body: JSON.stringify({
           studentId: user.id,
           type: 'submitted',
-          title: `Simulation Submitted`,
-          content: `Simulation of the class ${classCode} submitted successfully.`,
+          // ✅ טקסטים ניתנים לתרגום (ללא שינוי לוגיקה)
+          title: t('notif.title'),
+          content: t('notif.content', '').replace('{classCode}', classCode),
           time: new Date().toLocaleString(),
           read: false
         }),
@@ -97,18 +103,18 @@ const StudentSimulation = () => {
       if (response1.ok && response2.ok) {
         setIsLoadingToSubmit(false);
         setTimeout(() => {
-          showSuccessToast('✅ Your answer has been submitted successfully!');
+          showSuccessToast(t('toast.success'));
           navigate('/simulation_result', { state: { classCode } });
         }, 400);
       } else {
         setIsLoadingToSubmit(false);
         console.error('❌ Error submitting answer:', data1.message, ' ', data2.message);
-        alert('Error submitting answer. Please try again.');
+        alert(t('errors.submitError'));
       }
     } catch (error) {
       setIsLoadingToSubmit(false);
       console.error('❌ Server error:', error);
-      alert('Server error. Please try again.');
+      alert(t('errors.serverErrorShort'));
     }
   };
 
@@ -119,14 +125,20 @@ const StudentSimulation = () => {
         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
       <p className={`mt-4 text-xl font-semibold animate-pulse ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-        Loading simulation...
+        {t('loading')}
       </p>
     </div>
   );
 
+  if (!ready) return null;
+
   return (
     <div className="min-h-screen w-screen flex flex-col bg-slate-900 text-white">
-      <div className={`flex flex-col min-h-screen w-screen ${isDark ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-900'}`}>
+      <div
+        dir={dir}
+        lang={lang}
+        className={`flex flex-col min-h-screen w-screen ${isDark ? 'bg-slate-900 text-white' : 'bg-slate-200 text-slate-900'}`}
+      >
         <div className="px-4 mt-4">
           <StudentHeader />
         </div>
@@ -136,27 +148,37 @@ const StudentSimulation = () => {
         <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 w-full">
           {!loading && (
             <div className="w-full max-w-2xl bg-slate-100 text-black dark:bg-slate-800 dark:text-white p-8 rounded-xl shadow-lg">
-              <h2 className="text-3xl font-extrabold mb-4 text-center text-blue-500 ">🎯 Welcome to the Simulation!</h2>
+              <h2 className="text-3xl font-extrabold mb-4 text-center text-blue-500 ">
+                🎯 {t('welcome')}
+              </h2>
+
               <p className={`mb-6 text-center ${isDark ? 'text-white' : 'text-gray-700'}`}>
-                Please read the situation carefully and submit your answer below.
+                {t('instructions')}
               </p>
 
               <div className="bg-slate-100 text-black dark:bg-slate-800 dark:text-white rounded-lg shadow-md">
-                <h3 className="text-xl font-semibold mb-4 text-blue-500 ">Simulation Situation</h3>
+                <h3 className="text-xl font-semibold mb-4 text-blue-500 ">
+                  {t('simulationSituation')}
+                </h3>
+
                 <p className="text-gray-700 dark:text-gray-200 mb-6">{situation}</p>
 
-                <h4 className="text-lg font-semibold mb-2 text-blue-500 ">Question:</h4>
+                <h4 className="text-lg font-semibold mb-2 text-blue-500 ">
+                  {t('questionLabel')}
+                </h4>
+
                 <p className="text-gray-700 dark:text-gray-200 mb-4">{question}</p>
 
                 <form onSubmit={handleSubmit}>
                   <textarea
                     className="w-full p-3 rounded bg-slate-200 text-black dark:bg-slate-600 dark:text-white mb-4 resize-none"
                     rows="5"
-                    placeholder="Write your answer here..."
+                    placeholder={t('placeholder')}
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     required
                   />
+
                   <button
                     type="submit"
                     className={`mt-6 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 w-full flex justify-center items-center ${isLoadingToSubmit ? 'opacity-70 cursor-not-allowed' : ''}`}
@@ -168,10 +190,10 @@ const StudentSimulation = () => {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span>Submitting Simulation</span>
+                        <span>{t('submitting')}</span>
                       </>
                     ) : (
-                      'Submit Simulation'
+                      t('submit')
                     )}
                   </button>
                 </form>

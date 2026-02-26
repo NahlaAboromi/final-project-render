@@ -1,0 +1,15 @@
+{
+  "title": "Completed Simulations",
+  "searchPlaceholder": "Search classes by name...",
+  "classCodePlaceholder": "Class Code...",
+  "loading": "Loading classes...",
+  "empty": "No classes found.",
+  "codeLabel": "Code",
+  "subjectLabel": "Subject",
+  "viewDetails": "View Details",
+  "errors": {
+    "noUserId": "No user ID found.",
+    "fetchFailed": "Failed to fetch classes.",
+    "serverError": "Server error."
+  }
+}

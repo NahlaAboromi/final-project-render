@@ -1,0 +1,26 @@
+{
+  "loading": "טוען סימולציה...",
+  "welcome": "ברוכים הבאים לסימולציה!",
+  "instructions": "אנא קראי את המצב בעיון וכתבי את תשובתך למטה.",
+  "simulationSituation": " הסימולציה:",
+  "questionLabel": "שאלה:",
+  "placeholder": "כתבי כאן את תשובתך...",
+  "submit": "שלחי סימולציה",
+  "submitting": "מגיש ",
+
+  "toast": {
+    "success": "✅ התשובה נשלחה בהצלחה!"
+  },
+
+  "notif": {
+    "title": "הסימולציה נשלחה",
+    "content": "הסימולציה של הכיתה {classCode} נשלחה בהצלחה."
+  },
+
+  "errors": {
+    "classNotFound": "הכיתה לא נמצאה. נסי שוב.",
+    "serverError": "שגיאת שרת. נסי שוב מאוחר יותר.",
+    "submitError": "שגיאה בשליחת התשובה. נסי שוב.",
+    "serverErrorShort": "שגיאת שרת. נסי שוב."
+  }
+}

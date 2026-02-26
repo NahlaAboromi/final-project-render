@@ -1,0 +1,16 @@
+{
+  "overallScore": "ציון כללי",
+  "submitted": "הוגש בתאריך",
+  "answer": "התשובה שלך",
+  "caselAnalysis": "ניתוח CASEL",
+  "strengths": "חוזקות שנצפו",
+  "areasForImprovement": "תחומים לשיפור",
+  "suggestedIntervention": "התערבות מוצעת",
+  "depthLevel": "רמת עומק משוערת",
+
+  "selfAwareness": "מודעות עצמית",
+  "selfManagement": "ניהול עצמי",
+  "socialAwareness": "מודעות חברתית",
+  "relationshipSkills": "מיומנויות יחסים",
+  "responsibleDecisionMaking": "קבלת החלטות אחראית"
+}

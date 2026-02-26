@@ -1,0 +1,22 @@
+{
+  "title": "התחברות סטודנט",
+  "studentAlt": "סטודנט",
+  "noAccount": "אין לך חשבון?",
+  "registerNow": "להרשמה",
+  "forgotPassword": "שכחת סיסמה?",
+  "signIn": "התחבר/י",
+  "fields": {
+    "id": {
+      "label": "תעודת זהות",
+      "placeholder": "הכנס/י תעודת זהות"
+    },
+    "password": {
+      "label": "סיסמה",
+      "placeholder": "הכנס/י סיסמה"
+    }
+  },
+  "errors": {
+    "loginFailed": "ההתחברות נכשלה",
+    "loginError": "שגיאת התחברות. נסה/י שוב מאוחר יותר."
+  }
+}

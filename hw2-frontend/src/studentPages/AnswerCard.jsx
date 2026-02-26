@@ -6,8 +6,8 @@ import { useI18n } from '../utils/i18n';
 const StudentAnswerCard = ({ answer, isDark }) => {
   const { answerText, analysisResult, submittedAt } = answer || {};
   const { lang: ctxLang } = useContext(LanguageContext);
-  const { t, dir, lang, ready } = useI18n('studentAnswerCard');
-  
+  const { t, dir, lang, ready } = useI18n('studentAnswerAnalysis');
+
   if (!analysisResult || !ready) return null;
 
   // ========= NORMALIZATION =========
@@ -62,13 +62,13 @@ const StudentAnswerCard = ({ answer, isDark }) => {
 
   return (
     <main className="flex-1 w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6">
-      <div 
-        dir={dir} 
-        lang={lang} 
+      <div
+        dir={dir}
+        lang={lang}
         className="bg-slate-100 text-black dark:bg-slate-800 dark:text-white p-3 sm:p-4 md:p-6 rounded-lg"
       >
         <div className="bg-white dark:bg-slate-600 p-3 sm:p-4 md:p-5 rounded-lg shadow-md mb-4 sm:mb-6">
-          
+
           {/* Header: Score + Date */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-3 mb-4 pb-3 border-b border-slate-200 dark:border-slate-500">
             <div
@@ -87,7 +87,7 @@ const StudentAnswerCard = ({ answer, isDark }) => {
 
           {/* Main content */}
           <div className="space-y-4 sm:space-y-5">
-            
+
             {/* Answer Section */}
             <div>
               <h4 className="font-bold text-sm sm:text-base mb-2 flex items-center gap-2">

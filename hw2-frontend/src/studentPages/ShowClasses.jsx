@@ -1,13 +1,19 @@
+//C:\Users\n0502\OneDrive\שולחן העבודה\עבודה על הערות מגי יום שלישי רמדאן\final_project-main (2)\final_project-main\hw2-frontend\src\studentPages\ShowClasses.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { useI18n } from '../utils/i18n';
 
 const ClassManagerContent = () => {
   const { theme } = useContext(ThemeContext);
   const isDark = theme === 'dark';
   const { user } = useContext(UserContext);
+  const userId = user?.id;
   const navigate = useNavigate();
+
+  // ✅ i18n (NEW namespace, doesn't touch existing files)
+  const { t, dir, lang } = useI18n('classManagerStudent');
 
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +27,7 @@ const ClassManagerContent = () => {
     const fetchClasses = async () => {
       try {
         if (!user?.id) {
-          setError('No user ID found.');
+          setError(t('noUserId', 'No user ID found.'));
           setLoading(false);
           return;
         }
@@ -44,20 +50,21 @@ const ClassManagerContent = () => {
           setClasses(formattedData);
           setError('');
         } else {
-          setError(data.message || 'Failed to fetch classes.');
+          // keep server message if exists, otherwise localized fallback
+          setError(data.message || t('fetchFailed', 'Failed to fetch classes.'));
         }
       } catch (err) {
         // Handle network/server errors
-        setError('Server error.');
+        setError(t('serverError', 'Server error.'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchClasses();
-  }, [user]);
-
-  // Filter classes by search term and class code
+    // ✅ keep existing logic; t is stable enough here, but include it to avoid lint warnings
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [userId]);  // Filter classes by search term and class code
   const filteredClasses = classes.filter(classData => {
     const matchesSearch = searchTerm === '' ||
       classData.className.toLowerCase().includes(searchTerm.toLowerCase());
@@ -66,10 +73,11 @@ const ClassManagerContent = () => {
   });
 
   return (
-    <main className="flex-1 w-full px-4 py-6">
+    <main dir={dir} lang={lang} className="flex-1 w-full px-4 py-6">
       <p className={`text-grau-500 dark:text-white mb-2`}>
-        Here's Some Classes To Join:
+        {t('intro', "Here's Some Classes To Join:")}
       </p>
+
       <div className="bg-slate-100 text-black dark:bg-slate-600 dark:text-white p-6 rounded">
         {/* Search and filter inputs */}
         <div className="bg-white dark:bg-slate-700 p-4 rounded shadow mb-6">
@@ -77,7 +85,7 @@ const ClassManagerContent = () => {
             <div className="flex-1 relative">
               <input
                 type="text"
-                placeholder="Search classes by name..."
+                placeholder={t('searchByName', 'Search classes by name...')}
                 className="w-full py-2 px-4 pr-10 rounded border border-gray-300 dark:border-gray-500 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -98,10 +106,11 @@ const ClassManagerContent = () => {
                 />
               </svg>
             </div>
+
             <div className="flex gap-4 flex-wrap md:flex-nowrap">
               <input
                 type="text"
-                placeholder="Class Code..."
+                placeholder={t('classCodePlaceholder', 'Class Code...')}
                 className="py-2 px-4 rounded border border-gray-300 dark:border-gray-500 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={classCodeFilter}
                 onChange={(e) => setClassCodeFilter(e.target.value)}
@@ -113,32 +122,48 @@ const ClassManagerContent = () => {
         {/* Class list or status messages */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {loading ? (
-            <div className="text-center py-10">Loading classes...</div>
+            <div className="text-center py-10">
+              {t('loading', 'Loading classes...')}
+            </div>
           ) : error ? (
             <div className="bg-red-100 dark:bg-red-500 p-5 rounded text-center">
               <p>{error}</p>
             </div>
           ) : filteredClasses.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 p-5 rounded text-center">
-              <p>No classes found.</p>
+              <p>{t('noClasses', 'No classes found.')}</p>
             </div>
           ) : (
             filteredClasses
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by creation date descending
               .slice(0, visibleCount) // Show only visibleCount items
               .map((classData) => (
-                <div key={classData._id} className="bg-white dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-4 flex justify-between items-center">
+                <div
+                  key={classData._id}
+                  className="bg-white dark:bg-slate-700 dark:text-white rounded-md shadow-sm p-4 flex justify-between items-center"
+                >
                   <div>
                     <h2 className="text-lg font-bold mb-1">{classData.className}</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-300"><strong>Code:</strong> {classData.classCode}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-300"><strong>Subject:</strong> {classData.subject}</p>
+
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
+                      <strong>{t('codeLabel', 'Code:')}</strong> {classData.classCode}
+                    </p>
+
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
+                      <strong>{t('subjectLabel', 'Subject:')}</strong> {classData.subject}
+                    </p>
                   </div>
+
                   {/* Button to start simulation, navigates passing user and class info */}
                   <button
-                    onClick={() => navigate('/student-simulation', { state: { studentId: user.id, classCode: classData.classCode } })}
+                    onClick={() =>
+                      navigate('/student-simulation', {
+                        state: { studentId: user.id, classCode: classData.classCode },
+                      })
+                    }
                     className="ml-4 px-3 py-2 bg-slate-100 border-gray-800 dark:bg-slate-600 dark:text-white hover:border-blue-700 border border-transparent transition"
                   >
-                    Start Simulation
+                    {t('startSimulation', 'Start Simulation')}
                   </button>
                 </div>
               ))
@@ -153,7 +178,7 @@ const ClassManagerContent = () => {
                 onClick={() => setVisibleCount(visibleCount + 6)}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 dark:text-white hover:border-blue-700 border border-transparent transition"
               >
-                Load More
+                {t('loadMore', 'Load More')}
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -165,7 +190,7 @@ const ClassManagerContent = () => {
                 onClick={() => setVisibleCount(6)}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 dark:text-white hover:border-blue-700 border border-transparent transition"
               >
-                Show Less
+                {t('showLess', 'Show Less')}
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                 </svg>

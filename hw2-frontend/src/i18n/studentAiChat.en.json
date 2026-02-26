@@ -1,0 +1,15 @@
+{
+  "greeting": "👋 Hi {name}! I'm your AI assistant. Feel free to ask me anything about classes, your simulation results, or your teachers. I'm here to help you succeed! 🎓",
+  "title": "Ask the AI",
+  "tooltip": "Ask the AI",
+  "helpTooltip": "How to use this assistant",
+  "helpText": "🎓 I'm your AI assistant... just start typing! 💬",
+  "labelYou": "You",
+  "labelAI": "AI",
+  "placeholder": "Ask anything about classes and simulations...",
+  "send": "Ask",
+  "sending": "...",
+  "fallback": "Something went wrong.",
+  "errGeneric": "Error contacting AI.",
+  "closeAria": "Close"
+}

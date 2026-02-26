@@ -1,0 +1,15 @@
+{
+  "intro": "Here are some classes to join:",
+  "searchByName": "Search classes by name...",
+  "classCodePlaceholder": "Class Code...",
+  "loading": "Loading classes...",
+  "noClasses": "No classes found.",
+  "noUserId": "No user ID found.",
+  "fetchFailed": "Failed to fetch classes.",
+  "serverError": "Server error.",
+  "codeLabel": "Code:",
+  "subjectLabel": "Subject:",
+  "startSimulation": "Start Simulation",
+  "loadMore": "Load More",
+  "showLess": "Show Less"
+}

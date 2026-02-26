@@ -1,0 +1,22 @@
+{
+  "title": "Student Login",
+  "studentAlt": "Student",
+  "noAccount": "Don't have an account?",
+  "registerNow": "Register now",
+  "forgotPassword": "Forgot your password?",
+  "signIn": "Sign in",
+  "fields": {
+    "id": {
+      "label": "ID",
+      "placeholder": "Enter your ID"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    }
+  },
+  "errors": {
+    "loginFailed": "Login failed",
+    "loginError": "Login error. Please try again later."
+  }
+}

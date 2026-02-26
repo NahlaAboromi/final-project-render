@@ -28,12 +28,12 @@ const AIChat = ({ teacherId }) => {
   };
 
   const scrollToBottom = () => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
+    if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
   };
 
-  useEffect(() => { scrollToBottom(); }, [messages, loading]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, loading]);
 
   useEffect(() => {
     if (!showBox || !ready) return;
@@ -77,9 +77,9 @@ const AIChat = ({ teacherId }) => {
           teacherId,
           messages: newMessages.map(m => ({
             role: m.role === 'user' ? 'user' : 'assistant',
-            content: m.content
-          }))
-        })
+            content: m.content,
+          })),
+        }),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -90,6 +90,23 @@ const AIChat = ({ teacherId }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // ✅ SAME IDEA AS STUDENT:
+  // Hebrew (RTL): :AI
+  // English (LTR): AI:
+  const labelWithColon = (isUser) => {
+    const label = isUser ? t('labelYou') : t('labelAI');
+    if (!isUser && isRTL) return `:${label}`; // RTL: colon before
+    return `${label}:`; // normal
+  };
+
+  // ✅ IMPORTANT:
+  // AI label should always be LTR so it doesn’t flip around emojis/RTL text
+  // YOU label follows UI direction
+  const labelDir = (isUser) => {
+    if (!isUser) return 'ltr';
+    return isRTL ? 'rtl' : 'ltr';
   };
 
   return (
@@ -356,8 +373,9 @@ const AIChat = ({ teacherId }) => {
             <button
               onClick={closeChat}
               className={`text-lg font-bold rounded-full w-8 h-8 flex items-center justify-center transition-colors ${
-                isDark ? 'text-pink-400 hover:text-pink-500 bg-slate-700 hover:bg-slate-600'
-                       : 'text-red-500 hover:text-red-600 bg-white hover:bg-gray-100'
+                isDark
+                  ? 'text-pink-400 hover:text-pink-500 bg-slate-700 hover:bg-slate-600'
+                  : 'text-red-500 hover:text-red-600 bg-white hover:bg-gray-100'
               }`}
               aria-label="close"
             >
@@ -369,6 +387,7 @@ const AIChat = ({ teacherId }) => {
           <div ref={chatRef} className="ai-chat-messages space-y-2">
             {messages.map((msg, index) => {
               const isUser = msg.role === 'user';
+
               return (
                 <div
                   key={index}
@@ -382,11 +401,13 @@ const AIChat = ({ teacherId }) => {
                       isUser
                         ? 'bg-blue-600 text-white'
                         : (isDark ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-800'),
-                      isRTL ? 'text-right' : 'text-left'
+                      isRTL ? 'text-right' : 'text-left',
                     ].join(' ')}
                   >
-                    <strong><bdi>{isUser ? t('labelYou') : t('labelAI')}:</bdi></strong>{' '}
-                    {msg.content}
+                    <strong>
+                      <bdi dir={labelDir(isUser)}>{labelWithColon(isUser)}</bdi>
+                    </strong>{' '}
+                    <bdi>{msg.content}</bdi>
                   </div>
                 </div>
               );
@@ -394,12 +415,16 @@ const AIChat = ({ teacherId }) => {
 
             {loading && (
               <div className="w-full flex justify-start" dir={isRTL ? 'rtl' : 'ltr'} lang={lang}>
-                <div className={[
-                  'ai-message-bubble inline-flex items-center gap-1',
-                  isDark ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-800',
-                  isRTL ? 'text-right' : 'text-left'
-                ].join(' ')}>
-                  <strong><bdi>{t('labelAI')}:</bdi></strong>
+                <div
+                  className={[
+                    'ai-message-bubble inline-flex items-center gap-1',
+                    isDark ? 'bg-slate-700 text-white' : 'bg-gray-100 text-gray-800',
+                    isRTL ? 'text-right' : 'text-left',
+                  ].join(' ')}
+                >
+                  <strong>
+                    <bdi dir="ltr">{labelWithColon(false)}</bdi>
+                  </strong>
                   <div className="flex ms-2">
                     <span className="dot dot1" />
                     <span className="dot dot2" />
@@ -424,11 +449,7 @@ const AIChat = ({ teacherId }) => {
               dir={isRTL ? 'rtl' : 'ltr'}
               lang={lang}
             />
-            <button
-              onClick={handleSend}
-              disabled={loading}
-              className="ai-chat-send-btn"
-            >
+            <button onClick={handleSend} disabled={loading} className="ai-chat-send-btn">
               {loading ? t('asking') : t('ask')}
             </button>
           </div>

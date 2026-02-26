@@ -1,0 +1,7 @@
+{
+  "title": "Simulation Completed Successfully!",
+  "loading": "Loading answer...",
+  "returnDashboard": "Return to Dashboard",
+  "missingInfo": "Missing class or user information.",
+  "fetchFailed": "Failed to fetch student answer."
+}

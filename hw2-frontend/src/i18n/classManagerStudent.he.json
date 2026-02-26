@@ -1,0 +1,15 @@
+{
+  "intro": "הנה כמה כיתות להצטרפות:",
+  "searchByName": "חיפוש כיתות לפי שם...",
+  "classCodePlaceholder": "קוד כיתה...",
+  "loading": "טוען כיתות...",
+  "noClasses": "לא נמצאו כיתות.",
+  "noUserId": "לא נמצא מזהה משתמש.",
+  "fetchFailed": "נכשל להביא כיתות.",
+  "serverError": "שגיאת שרת.",
+  "codeLabel": "קוד:",
+  "subjectLabel": "נושא:",
+  "startSimulation": "התחל סימולציה",
+  "loadMore": "טען עוד",
+  "showLess": "הצג פחות"
+}
