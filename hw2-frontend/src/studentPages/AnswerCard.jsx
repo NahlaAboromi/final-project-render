@@ -1,4 +1,4 @@
-// src/StudentAnswerCard.jsx
+// src/AnswerCard.jsx
 import React, { useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import { useI18n } from '../utils/i18n';

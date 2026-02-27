@@ -1,0 +1,16 @@
+{
+  "title": "כניסת מנהל",
+  "subtitle": "גישה למחקר ולנתוני מערכת ",
+  "adminAlt": "Admin",
+  "fields": {
+    "password": {
+      "label": "סיסמה",
+      "placeholder": "הקלידי סיסמה..."
+    }
+  },
+  "signIn": "כניסה",
+  "errors": {
+    "invalidPassword": "סיסמה שגויה.",
+    "loginError": "אירעה שגיאה. נסי שוב."
+  }
+}

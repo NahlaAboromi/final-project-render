@@ -1,0 +1,16 @@
+{
+  "title": "Admin Login",
+  "subtitle": "Access research and system data ",
+  "adminAlt": "Admin",
+  "fields": {
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter password..."
+    }
+  },
+  "signIn": "Sign in",
+  "errors": {
+    "invalidPassword": "Invalid password.",
+    "loginError": "Something went wrong. Please try again."
+  }
+}

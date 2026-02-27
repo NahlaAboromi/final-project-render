@@ -51,6 +51,22 @@ case 'classDetailsStudent':
     ? await import('../i18n/studentSimulationPage.he.json')
     : await import('../i18n/studentSimulationPage.en.json');
   break;
+  case 'adminLogin':
+  mod = lang === 'he'
+    ? await import('../i18n/adminLogin.he.json')
+    : await import('../i18n/adminLogin.en.json');
+  break;
+
+case 'adminHeader':
+  mod = lang === 'he'
+    ? await import('../i18n/adminHeader.he.json')
+    : await import('../i18n/adminHeader.en.json');
+  break;
+  case "adminHome":
+  mod = lang === "he"
+    ? await import("../i18n/adminHome.he.json")
+    : await import("../i18n/adminHome.en.json");
+  break;
   case 'studentAiChat':
   mod = lang === 'he'
     ? await import('../i18n/studentAiChat.he.json')
@@ -60,6 +76,16 @@ case 'classDetailsStudent':
   mod = lang === 'he'
     ? await import('../i18n/classManagerStudent.he.json')
     : await import('../i18n/classManagerStudent.en.json');
+  break;
+  case "adminSessions":
+  mod = lang === "he"
+    ? await import("../i18n/adminSessions.he.json")
+    : await import("../i18n/adminSessions.en.json");
+  break;
+  case "adminResults":
+  mod = lang === "he"
+    ? await import("../i18n/adminResults.he.json")
+    : await import("../i18n/adminResults.en.json");
   break;
   case 'studentRecentActivity':
   mod = lang === 'he'

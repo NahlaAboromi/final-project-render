@@ -1,0 +1,46 @@
+{
+  "title": "View all study participants and their results",
+  "subtitle": "Filter by assigned date and group. Open demographics or results.",
+  "filters": {
+    "assignedDate": "Assigned Date",
+    "group": "Group",
+    "all": "All",
+    "clear": "Clear Filters"
+  },
+  "group": {
+    "experimental": "Experimental",
+    "control": "Control"
+  },
+  "states": {
+    "loading": "Loading…",
+    "empty": "No participants found."
+  },
+  "errors": {
+    "fetchFailed": "Failed to load sessions."
+  },
+  "table": {
+    "num": "#",
+    "email": "Email",
+    "group": "Group",
+    "totalTime": "Total Time",
+    "date": "Date",
+    "demographics": "Demographics",
+    "results": "Results"
+  },
+  "buttons": {
+    "demographics": "Demographics",
+    "results": "Results",
+    "close": "Close"
+  },
+  "modal": {
+    "title": "Participant demographics",
+    "fields": {
+      "anonId": "anonId",
+      "email": "Email",
+      "gender": "Gender",
+      "ageRange": "Age range",
+      "fieldOfStudy": "Field of study",
+      "semester": "Semester"
+    }
+  }
+}

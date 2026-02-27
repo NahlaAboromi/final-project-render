@@ -40,7 +40,10 @@ import Thanks from './Research/Thanks/Thanks';
 import AnonymousSimulationResult from './Research/AnonymousSimulationResult';
 import AssessmentContainer from './Research/assessment/AssessmentContainer';
 import UeqQuestionnaire from './Research/UeqQuestionnaire';
-
+import AdminLogin from "./admin/AdminLogin.jsx";
+import AdminHome from "./admin/AdminHome";
+import AdminSessions from "./admin/AdminSessions";
+import AdminResults from "./admin/AdminResults";
 function App() {
   return (
     <LanguageProvider>
@@ -51,8 +54,10 @@ function App() {
           <StudentNotificationsProvider>
             <Router>
               <Routes>
+              <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/" element={<Homepage />} />
-
+<Route path="/admin" element={<AdminHome />} />
+<Route path="/admin/results/:anonId" element={<AdminResults />} /><Route path="/admin/sessions" element={<AdminSessions />} />
                 <Route path="/teacher-login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} /> 

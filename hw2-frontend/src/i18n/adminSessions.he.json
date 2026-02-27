@@ -1,0 +1,46 @@
+{
+  "title": "צפייה בכל משתתפי המחקר והתוצאות שלהם",
+  "subtitle": "סינון לפי תאריך שיוך וקבוצה. ניתן לפתוח דמוגרפיה או לצפות בתוצאות.",
+  "filters": {
+    "assignedDate": "תאריך שיוך",
+    "group": "קבוצה",
+    "all": "הכל",
+    "clear": "נקה סינונים"
+  },
+  "group": {
+    "experimental": "ניסוי",
+    "control": "ביקורת"
+  },
+  "states": {
+    "loading": "טוען…",
+    "empty": "לא נמצאו משתתפים."
+  },
+  "errors": {
+    "fetchFailed": "נכשל לטעון סשנים."
+  },
+  "table": {
+    "num": "#",
+    "email": "אימייל",
+    "group": "קבוצה",
+    "totalTime": "זמן כולל",
+    "date": "תאריך",
+    "demographics": "דמוגרפיה",
+    "results": "תוצאות"
+  },
+  "buttons": {
+    "demographics": "דמוגרפיה",
+    "results": "תוצאות",
+    "close": "סגירה"
+  },
+  "modal": {
+    "title": "דמוגרפיה של משתתף/ת",
+    "fields": {
+      "anonId": "anonId",
+      "email": "אימייל",
+      "gender": "מגדר",
+      "ageRange": "טווח גיל",
+      "fieldOfStudy": "תחום לימוד",
+      "semester": "סמסטר"
+    }
+  }
+}

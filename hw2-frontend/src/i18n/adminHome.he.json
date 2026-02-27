@@ -1,0 +1,14 @@
+{
+  "title": "לוח ניהול",
+  "subtitle": "סקירה של משתתפי המחקר לפי קבוצות.",
+  "quickActionsTitle": "פעולות מהירות",
+  "loading": "טוען סקירה...",
+  "cards": {
+    "total": "סה״כ משתתפים",
+    "experimental": "קבוצת ניסוי",
+    "control": "קבוצת ביקורת"
+  },
+  "actions": {
+      "participantsResultsDesc": "צפייה בכל משתתפי המחקר ובתוצאות שלהם"
+  }
+}

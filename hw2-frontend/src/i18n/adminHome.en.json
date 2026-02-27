@@ -1,0 +1,14 @@
+{
+  "title": "Admin Dashboard",
+  "subtitle": "Overview of study participants by group.",
+  "quickActionsTitle": "Quick Actions",
+  "loading": "Loading overview...",
+  "cards": {
+    "total": "Total Participants",
+    "experimental": "Experimental Group",
+    "control": "Control Group"
+  },
+  "actions": {
+    "viewAllSessions": "View all study participants and their results"
+  }
+}

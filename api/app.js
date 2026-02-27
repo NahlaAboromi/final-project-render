@@ -109,6 +109,8 @@ const teacherStudentProgressRouter = require('./routers/teacherStudentProgress.r
 const anonymousStudentsRouter = require('./routers/anonymousStudents.route');
 const assignRouter = require('./routers/assign.route');
 const translateRouter = require('./routers/translate.route');
+const adminRouter = require("./routers/admin.route");
+app.use("/api", adminRouter);
 app.use('/api', translateRouter);
 app.use('/api', assignRouter);
 // ✅ זה מה שהיה חסר:
