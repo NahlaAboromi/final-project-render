@@ -30,7 +30,9 @@ const TrialSchema = new mongoose.Schema({
   assignedAt: { type: Date, default: Date.now },
   startedAt:  { type: Date, default: null },
   endedAt:    { type: Date, default: null },
-
+  // ✅ זמנים של הסימולציה בלבד (כדי לא להתבלבל עם startedAt/endedAt של כל התהליך)
+  simulationStartedAt: { type: Date, default: null },
+  simulationEndedAt:   { type: Date, default: null },
   // תשובות לסימולציה
   answers: { type: [String], default: [] },
 

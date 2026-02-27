@@ -16,8 +16,7 @@ async function startTrial(anonId) {
       body: JSON.stringify({ anonId }),
     });
     const data = await res.json().catch(() => ({}));
-    localStorage.setItem('simStartAtISO', (data?.startedAt) || new Date().toISOString());
-  } catch (e) {
+localStorage.setItem('simStartAtISO', (data?.simulationStartedAt) || new Date().toISOString());  } catch (e) {
     console.warn('[startTrial] failed, fallback to now:', e);
     localStorage.setItem('simStartAtISO', new Date().toISOString());
   }

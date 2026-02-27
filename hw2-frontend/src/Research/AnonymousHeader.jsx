@@ -139,15 +139,19 @@ const handleLogout = async () => {
       durationSec = Math.max(0, Math.round(data.sessionDurationSec));
     }
 
-    const summaryPayload = {
-      ...(data || {}),
-      createdAt: startISO || nowISO,
-      createdAtLocal: data?.createdAtLocal || nowLocal,
-      lastSeenAt: nowISO,
-      lastSeenAtLocal: nowLocal,
-      sessionDurationSec: durationSec,
-    };
+const summaryPayload = {
+  ...(data || {}),
+  createdAt: startISO || nowISO,
+  createdAtLocal: data?.createdAtLocal || nowLocal,
 
+  lastSeenAt: nowISO,
+  lastSeenAtLocal: nowLocal,
+
+  endedAt: nowISO,          // ✅ חדש: אותו זמן שמוצג בחלון
+  endedAtLocal: nowLocal,   // ✅ חדש (אם את מציגה מקומי)
+
+  sessionDurationSec: durationSec,
+};
     console.log('🟩 [AnonymousHeader] sessionSummary state SET, data=', summaryPayload);
     setSessionSummary(summaryPayload);
   } finally {
@@ -167,15 +171,40 @@ const confirmAndExit = async () => {
   console.log('🟪 [AnonymousHeader] confirmAndExit() CALLED');
 
   // קודם כל: עוצרים את הטיימר בשרת (סיום סשן אמיתי)
-  if (student?.anonId) {
-    try {
-      console.log('🟥 [AnonymousHeader] calling stopSessionTimer (confirm) anonId =', student.anonId);
-      await stopSessionTimer(student.anonId);
-      console.log('🟩 [AnonymousHeader] stopSessionTimer FINISHED (confirm)');
-    } catch (e) {
-      console.error('❌ [AnonymousHeader] stopSessionTimer ERROR (confirm):', e);
-    }
+if (student?.anonId) {
+  const startedAtISO = sessionSummary?.createdAt || sessionSummary?.firstSeenAt || null;
+  const endedAtISO =
+    sessionSummary?.endedAt ||
+    sessionSummary?.lastSeenAt ||
+    new Date().toISOString();
+
+  // 1) שמירה ל-DB (end-session) — לבד
+  try {
+    const res = await fetch(`/api/trial/end-session`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        anonId: student.anonId,
+        startedAt: startedAtISO,
+        endedAt: endedAtISO,
+      }),
+    });
+
+    console.log('✅ end-session status:', res.status);
+    console.log('✅ end-session body:', await res.json().catch(() => null));
+  } catch (e) {
+    console.error('❌ end-session ERROR:', e);
   }
+
+  // 2) עצירת טיימר — לבד (שלא יפיל את השמירה)
+  try {
+    console.log('🟥 [AnonymousHeader] calling stopSessionTimer (confirm) anonId =', student.anonId);
+    await stopSessionTimer(student.anonId);
+    console.log('🟩 [AnonymousHeader] stopSessionTimer FINISHED (confirm)');
+  } catch (e) {
+    console.error('❌ stopSessionTimer ERROR (confirm):', e);
+  }
+}
 
   // ואז סוגרים מודל, מנקים סטודנט ויוצאים לדף הבית
   setShowModal(false);

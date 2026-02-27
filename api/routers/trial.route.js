@@ -63,17 +63,53 @@ router.patch('/trial/start', async (req, res) => {
 
     const updated = await Trial.findOneAndUpdate(
       { anonId },
-      { startedAt: new Date() },
+      { $set: { simulationStartedAt: new Date() } },
       { new: true }
     ).lean();
 
     if (!updated) return res.status(404).json({ error: 'trial_not_found' });
 
-    console.log('[TRIAL/START] anonId=', anonId, 'startedAt=', updated.startedAt);
-    res.json({ ok: true, startedAt: updated.startedAt });
+console.log('[TRIAL/START] anonId=', anonId, 'simulationStartedAt=', updated.simulationStartedAt);   
+ res.json({ ok: true, simulationStartedAt: updated.simulationStartedAt });
   } catch (err) {
     console.error('[TRIAL/START] error:', err);
     res.status(500).json({ error: 'start_failed', details: err.message });
+  }
+});
+// ✅ END SESSION on SignOut: עדכון endedAt (וגם startedAt אם חסר)
+router.patch('/trial/end-session', async (req, res) => {
+  try {
+    const { anonId, endedAt, startedAt } = req.body || {};
+    if (!anonId) return res.status(400).json({ ok: false, error: 'anonId_required' });
+
+    const end = endedAt ? new Date(endedAt) : new Date();
+    if (Number.isNaN(end.getTime())) {
+      return res.status(400).json({ ok: false, error: 'endedAt_invalid' });
+    }
+
+    const start = startedAt ? new Date(startedAt) : null;
+    if (start && Number.isNaN(start.getTime())) {
+      return res.status(400).json({ ok: false, error: 'startedAt_invalid' });
+    }
+
+    // הכי חדש של אותו anonId (אם אצלך תמיד יש אחד—זה מספיק)
+    const updated = await Trial.findOneAndUpdate(
+      { anonId },
+      {
+        $set: {
+          endedAt: end,
+          ...(start ? { startedAt: start } : {}), // ישים רק אם נשלח
+        },
+      },
+      { new: true, sort: { createdAt: -1 } }
+    ).lean();
+
+    if (!updated) return res.status(404).json({ ok: false, error: 'trial_not_found' });
+
+    return res.json({ ok: true, startedAt: updated.startedAt, endedAt: updated.endedAt });
+  } catch (err) {
+    console.error('[TRIAL/END-SESSION] error:', err);
+    return res.status(500).json({ ok: false, error: 'end_session_failed', details: err.message });
   }
 });
 router.patch('/trial/finish', async (req, res) => {
@@ -95,7 +131,7 @@ router.patch('/trial/finish', async (req, res) => {
 
     const update = {
       answers: newAnswers,
-      endedAt: new Date(),
+      simulationEndedAt: new Date(),
     };
 
     if (changed) {
@@ -144,8 +180,7 @@ router.post('/submit-answer', async (req, res) => {
     trial.answers.push(answerText);
     trial.aiAnalysisJson = analysisResult;
     trial.aiAnalysis = analysisResult?.fullText || '';
-    trial.endedAt = new Date();
-
+trial.simulationEndedAt = new Date();
     await trial.save();
 
     console.log('[SUBMIT-ANSWER] anonId=', anonId,
@@ -792,10 +827,6 @@ router.patch('/trial/final-reflection', async (req, res) => {
       submittedAt: new Date()
     };
 
-    // 3) Only set endedAt if empty
-    if (!trial.endedAt) {
-      trial.endedAt = new Date();
-    }
 
     // 4) Save
     await trial.save();
