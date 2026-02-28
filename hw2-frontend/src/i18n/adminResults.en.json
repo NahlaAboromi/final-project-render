@@ -35,8 +35,8 @@
     "group": "Group",
     "scenarioId": "Scenario",
     "assignedAt": "assignedAt",
-    "processStartedAt": "Process Started (startedAt)",
-    "processEndedAt": "Process Ended (endedAt)",
+    "processStartedAt": "Process Started",
+    "processEndedAt": "Process Ended",
     "processDuration": "Process Duration",
     "simStartedAt": "Simulation Started",
     "simEndedAt": "Simulation Ended",
@@ -52,8 +52,8 @@
     "questionKey": "Question key",
     "value": "Value",
     "simAnswers": "Simulation answers",
-    "aiAnalysis": "AI Analysis (text)",
-    "aiAnalysisJson": "AI Analysis (JSON)",
+    "aiAnalysis": "AI Analysis",
+    "aiAnalysisJson": "AI Analysis JSON",
     "turns": "Total turns",
     "studentTurns": "Student turns",
     "aiTurns": "AI turns",
@@ -61,8 +61,6 @@
     "chatSummary": "Conversation summary",
     "recommendations": "Recommendations",
     "finalReflection": "Final reflection",
-    "insight": "Insight",
-    "usefulness": "Usefulness",
     "createdAt": "createdAt",
     "ueqScores": "UEQ scores",
     "pragmatic": "Pragmatic",
@@ -70,5 +68,21 @@
     "overall": "Overall",
     "responses": "Responses",
     "item": "Item"
+  },
+
+  "finalReflection": {
+
+    "title": "Final Reflection",
+
+    "subtitle": "Before we end, please share your experience with Casely, your Socratic coach",
+
+    "questions": {
+
+      "insight": "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
+
+      "usefulness": "Overall, do you feel that talking with Casely was useful or meaningful to you?"
+
+    }
+
   }
 }

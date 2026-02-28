@@ -9,6 +9,6 @@
     "control": "Control Group"
   },
   "actions": {
-    "viewAllSessions": "View all study participants and their results"
+    "participantsResultsDesc": "View all study participants and their results"
   }
 }

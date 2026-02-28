@@ -1,65 +1,161 @@
 // src/admin/AdminResults.jsx
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import { SectionLabel, Card } from "./AdminResultsShared";
+
 import AdminHeader from "./AdminHeader";
 import Footer from "../layout/Footer";
+
+import ParticipantSection from "./ParticipantSection";
+import TrialTimelineSection from "./TrialTimelineSection";
+import CaselSection from "./CaselSection";
+import SimulationSection from "./SimulationSection";
+import SocraticChatSection from "./SocraticChatSection";
+import UeqSection from "./UeqSection";
+
 import { ThemeProvider, ThemeContext } from "../DarkLightMood/ThemeContext";
 import { LanguageContext } from "../context/LanguageContext";
 import { useI18n } from "../utils/i18n";
-import AnswerCard from "../studentPages/AnswerCard";
 
-/* ========= helpers ========= */
-const fmtDateTime = (d, locale) => {
-  if (!d) return "—";
-  try {
-    const dt = new Date(d);
-    if (Number.isNaN(dt.getTime())) return "—";
-    return dt.toLocaleString(locale);
-  } catch {
-    return "—";
+/* =========================
+   helpers (keep in this file)
+========================= */
+
+const normalizeCategoryKey = (raw) => {
+  const s = String(raw || "").trim().toLowerCase();
+  const flat = s.replace(/[\s\-_]/g, "");
+
+  if (flat.includes("selfawareness")) return "Self-Awareness";
+  if (flat.includes("selfmanagement")) return "Self-Management";
+  if (flat.includes("socialawareness")) return "Social Awareness";
+  if (flat.includes("relationshipskills") || flat.includes("relationships") || flat.includes("interpersonal"))
+    return "Relationship Skills";
+  if (flat.includes("responsibledecisionmaking") || flat.includes("decisionmaking"))
+    return "Responsible Decision-Making";
+
+  // Hebrew fallbacks
+  if (s.includes("מודעות") && s.includes("עצמ")) return "Self-Awareness";
+  if (s.includes("ניהול") && s.includes("עצמ")) return "Self-Management";
+  if (s.includes("מודעות") && s.includes("חברת")) return "Social Awareness";
+  if (s.includes("מיומנויות") && (s.includes("בין") || s.includes("אישיות"))) return "Relationship Skills";
+  if (s.includes("החלט") || s.includes("אחראי") || s.includes("אחראית")) return "Responsible Decision-Making";
+
+  return "Other";
+};
+
+const parseLikertValue = (v) => {
+  if (v == null) return null;
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+
+  const s = String(v).trim();
+  const asNum = Number(s);
+  if (!Number.isNaN(asNum) && Number.isFinite(asNum)) return asNum;
+
+  const en = s.toLowerCase();
+  if (en.includes("strongly disagree")) return 1;
+  if (en === "disagree" || en.includes(" disagree")) return 2;
+  if (en === "agree" || en.includes(" agree")) return 3;
+  if (en.includes("strongly agree")) return 4;
+
+  if (s.includes("מאוד לא מסכ")) return 1;
+  if (s.includes("לא מסכ")) return 2;
+  if (s === "מסכים" || s === "מסכימה" || s.includes("מסכ")) return 3;
+  if (s.includes("מאוד מסכ")) return 4;
+
+  return null;
+};
+
+const calcCaselCategoryAverages = (answers = [], qMap) => {
+  const buckets = new Map();
+
+  (answers || []).forEach((a) => {
+    const q = qMap?.get?.(a.questionKey);
+    const canonicalCat = normalizeCategoryKey(
+      q?.category || q?.competency || q?.skill || q?.domain
+    );
+
+    const val = parseLikertValue(a.value);
+    if (val == null) return;
+
+    const cur = buckets.get(canonicalCat) || { sum: 0, count: 0 };
+    cur.sum += val;
+    cur.count += 1;
+    buckets.set(canonicalCat, cur);
+  });
+
+  const out = {};
+  for (const [cat, { sum, count }] of buckets.entries()) {
+    out[cat] = count ? sum / count : null;
   }
+  return out;
 };
 
-const fmtDuration = (sec) => {
-  const s = Math.max(0, Math.floor(Number(sec || 0)));
-  const hh = Math.floor(s / 3600);
-  const mm = Math.floor((s % 3600) / 60);
-  const ss = s % 60;
-  const pad = (n) => String(n).padStart(2, "0");
-  if (hh > 0) return `${pad(hh)}:${pad(mm)}:${pad(ss)}`;
-  return `${pad(mm)}:${pad(ss)}`;
+// Detect question language (prefer explicit q.lang, else heuristic)
+const detectQuestionLang = (q) => {
+  if (q?.lang === "he" || q?.language === "he") return "he";
+  if (q?.lang === "en" || q?.language === "en") return "en";
+  const text = String(q?.text || "");
+  if (/[א-ת]/.test(text)) return "he";
+  return "en";
 };
 
-const safeEntries = (obj) => {
-  if (!obj) return [];
-  if (obj instanceof Map) return Array.from(obj.entries());
-  if (typeof obj === "object") return Object.entries(obj);
-  return [];
+// Map numeric likert (1..4) to label by language
+const likertLabel = (num, qLang) => {
+  const n = Number(num);
+  if (!Number.isFinite(n)) return null;
+
+  const he = {
+    1: "מאוד לא מסכים/ה",
+    2: "לא מסכים/ה",
+    3: "מסכים/ה",
+    4: "מאוד מסכים/ה",
+  };
+  const en = {
+    1: "Strongly Disagree",
+    2: "Disagree",
+    3: "Agree",
+    4: "Strongly Agree",
+  };
+
+  const dict = qLang === "he" ? he : en;
+  return dict[n] || null;
 };
 
-const Card = ({ title, isDark, children }) => (
-  <section
-    className={`rounded-xl border shadow-sm mb-4 ${
-      isDark ? "bg-slate-800/60 border-slate-700" : "bg-white/80 border-slate-200"
-    }`}
-  >
-    <div className={`px-4 py-3 border-b ${isDark ? "border-slate-700" : "border-slate-200"}`}>
-      <h2 className="font-bold">{title}</h2>
-    </div>
-    <div className="px-4 py-4">{children}</div>
-  </section>
-);
+// Show value as: "1 (Strongly Disagree)" / "1 (מאוד לא מסכים/ה)"
+const prettyLikertValue = (rawValue, qLang) => {
+  if (rawValue == null) return "—";
 
-const KV = ({ label, value, isRTL }) => (
-  <div className={`flex ${isRTL ? "flex-row-reverse" : "flex-row"} items-start justify-between gap-4`}>
-    <div className="text-sm opacity-70">{label}</div>
-    <div className="text-sm font-semibold break-words text-right max-w-[70%]">{value}</div>
-  </div>
-);
+  const s = String(rawValue).trim();
+  const asNum = Number(s);
+
+  if (!Number.isNaN(asNum) && Number.isFinite(asNum)) {
+    const lbl = likertLabel(asNum, qLang);
+    return lbl ? `${asNum} (${lbl})` : String(asNum);
+  }
+  return s;
+};
+
+// dots like old design
+const CASEL_DOT_STYLE = {
+  "Self-Awareness": { dot: "bg-orange-400" },
+  "Self-Management": { dot: "bg-amber-400" },
+  "Social Awareness": { dot: "bg-yellow-400" },
+  "Relationship Skills": { dot: "bg-lime-500" },
+  "Responsible Decision-Making": { dot: "bg-emerald-500" },
+};
+
+const getCaselStyle = (key) => CASEL_DOT_STYLE[key] || { dot: "bg-slate-400" };
+
+/* =========================
+   component
+========================= */
 
 const AdminResultsContent = () => {
   const navigate = useNavigate();
   const { anonId } = useParams();
+
+  const back = () => navigate("/admin/sessions");
 
   const { theme } = useContext(ThemeContext);
   const isDark = theme === "dark";
@@ -68,14 +164,37 @@ const AdminResultsContent = () => {
   const isRTL = lang === "he";
   const locale = lang === "he" ? "he-IL" : "en-US";
 
-  // ✅ i18n (NO early return before hooks)
   const { t, ready } = useI18n("adminResults");
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const url = useMemo(() => `/api/admin/results/${encodeURIComponent(anonId || "")}`, [anonId]);
+  const url = useMemo(
+    () => `/api/admin/results/${encodeURIComponent(anonId || "")}`,
+    [anonId]
+  );
+
+  const fmtDateTime = (d, localeArg) => {
+    if (!d) return "—";
+    try {
+      const dt = new Date(d);
+      if (Number.isNaN(dt.getTime())) return "—";
+      return dt.toLocaleString(localeArg);
+    } catch {
+      return "—";
+    }
+  };
+
+  const fmtDuration = (sec) => {
+    const s = Math.max(0, Math.floor(Number(sec || 0)));
+    const hh = Math.floor(s / 3600);
+    const mm = Math.floor((s % 3600) / 60);
+    const ss = s % 60;
+    const pad = (n) => String(n).padStart(2, "0");
+    if (hh > 0) return `${pad(hh)}:${pad(mm)}:${pad(ss)}`;
+    return `${pad(mm)}:${pad(ss)}`;
+  };
 
   useEffect(() => {
     if (!ready || !anonId) return;
@@ -109,76 +228,88 @@ const AdminResultsContent = () => {
     return () => controller.abort();
   }, [ready, anonId, url, lang]);
 
-  const back = () => navigate("/admin/sessions");
-
-  const groupType = data?.trialInfo?.groupType || "—";
-  const isExperimental = groupType === "experimental";
-// ✅ Chat session summary (ignore __CHAT_SESSION_START__)
-const chatMessagesClean = useMemo(() => {
-  const msgs = data?.socraticChat?.messages || [];
-  return msgs.filter((m) => m?.text !== "__CHAT_SESSION_START__");
-}, [data]);
-
-const chatFirstTs = chatMessagesClean.length ? chatMessagesClean[0].timestamp : null;
-const chatLastTs = chatMessagesClean.length
-  ? chatMessagesClean[chatMessagesClean.length - 1].timestamp
-  : null;
-
-const chatDurationSecUi = useMemo(() => {
-  if (!chatFirstTs || !chatLastTs) return 0;
-  const a = new Date(chatFirstTs).getTime();
-  const b = new Date(chatLastTs).getTime();
-  if (Number.isNaN(a) || Number.isNaN(b)) return 0;
-  return Math.max(0, Math.floor((b - a) / 1000));
-}, [chatFirstTs, chatLastTs]);
-  // ✅ שאלות לפי השרת (מגיעים ב-data.questions)
+  // questions maps
   const caselQuestions = data?.questions?.casel || [];
-  const ueqQuestions = data?.questions?.ueq || [];
-
-  // ✅ maps: key -> question
   const caselQMap = useMemo(() => {
     const m = new Map();
     caselQuestions.forEach((q) => m.set(q.key, q));
     return m;
   }, [caselQuestions]);
 
-  const ueqQMap = useMemo(() => {
-    const m = new Map();
-    ueqQuestions.forEach((q) => m.set(q.key, q));
-    return m;
-  }, [ueqQuestions]);
+  const caselPreAverages = useMemo(() => {
+    const answers = data?.casel?.pre?.answers || [];
+    return calcCaselCategoryAverages(answers, caselQMap);
+  }, [data, caselQMap]);
 
-  // ✅ הופך answers (questionKey/value) לטבלה עם טקסט השאלה
+  const caselPostAverages = useMemo(() => {
+    const answers = data?.casel?.post?.answers || [];
+    return calcCaselCategoryAverages(answers, caselQMap);
+  }, [data, caselQMap]);
+
   const renderCaselAnswersTable = (answers = []) => {
-    if (!answers.length) return null;
+    if (!Array.isArray(answers) || answers.length === 0) return null;
 
     return (
-      <div className={`rounded-lg border ${isDark ? "border-slate-700" : "border-slate-200"}`}>
+      <div
+        className={`rounded-xl border overflow-hidden ${
+          isDark ? "border-slate-700" : "border-slate-200"
+        }`}
+      >
         <table className="min-w-full text-sm">
           <thead>
-            <tr className={`${isDark ? "bg-slate-900/40" : "bg-slate-100"}`}>
-              <th className={`p-3 ${isRTL ? "text-right" : "text-left"}`}>
+            <tr className={`${isDark ? "bg-slate-900/50" : "bg-slate-50"}`}>
+              <th
+                className={`p-3 text-xs font-semibold uppercase tracking-wide ${
+                  isDark ? "text-slate-400" : "text-slate-500"
+                } ${isRTL ? "text-right" : "text-left"}`}
+              >
                 {lang === "he" ? "שאלה" : "Question"}
               </th>
-              <th className="p-3 text-center">{lang === "he" ? "ערך" : "Value"}</th>
+              <th
+                className={`p-3 text-xs font-semibold uppercase tracking-wide text-center ${
+                  isDark ? "text-slate-400" : "text-slate-500"
+                }`}
+              >
+                {lang === "he" ? "ערך" : "Value"}
+              </th>
             </tr>
           </thead>
+
           <tbody>
             {answers.map((a, idx) => {
               const q = caselQMap.get(a.questionKey);
               const questionText = q?.text || a.questionKey;
               const category = q?.category ? ` • ${q.category}` : "";
 
+              const dotClass = getCaselStyle(
+                normalizeCategoryKey(q?.category || q?.competency || q?.skill || q?.domain)
+              ).dot;
+
+              const shownValue = prettyLikertValue(a.value, detectQuestionLang(q));
+
               return (
                 <tr
                   key={`${a.questionKey}-${idx}`}
-                  className={`border-t ${isDark ? "border-slate-700" : "border-slate-200"}`}
+                  className={`border-t ${
+                    isDark
+                      ? "border-slate-700 hover:bg-slate-700/30"
+                      : "border-slate-100 hover:bg-slate-50"
+                  }`}
                 >
                   <td className={`p-3 ${isRTL ? "text-right" : "text-left"} align-top`}>
-                    <div className="font-semibold">{questionText}</div>
-                    <div className="text-xs opacity-70">{a.questionKey}{category}</div>
+                    <div className="flex items-start gap-2">
+                      <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${dotClass}`} />
+                      <div>
+                        <div className="font-semibold">{questionText}</div>
+                        <div className="text-xs opacity-60 mt-0.5">
+                          {a.questionKey}
+                          {category}
+                        </div>
+                      </div>
+                    </div>
                   </td>
-                  <td className="p-3 text-center font-semibold align-top">{a.value}</td>
+
+                  <td className="p-3 text-center font-semibold align-top">{shownValue}</td>
                 </tr>
               );
             })}
@@ -188,435 +319,170 @@ const chatDurationSecUi = useMemo(() => {
     );
   };
 
-  // ✅ UEQ responses (Map key->value) לטבלה עם טקסט השאלה
-  const renderUeqTable = () => {
-    const entries = safeEntries(data?.ueq?.responses);
-    if (!entries.length) return null;
+  const groupType = data?.trialInfo?.groupType || "—";
+  const isExperimental = groupType === "experimental";
 
-    return (
-      <div className={`rounded-lg border ${isDark ? "border-slate-700" : "border-slate-200"}`}>
-        <table className="min-w-full text-sm">
-          <thead>
-            <tr className={`${isDark ? "bg-slate-900/40" : "bg-slate-100"}`}>
-              <th className={`p-3 ${isRTL ? "text-right" : "text-left"}`}>
-                {lang === "he" ? "פריט" : "Item"}
-              </th>
-              <th className="p-3 text-center">{lang === "he" ? "ערך" : "Value"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map(([k, v]) => {
-              const q = ueqQMap.get(k);
-              const questionText = q?.text || k;
-              const category = q?.category ? ` • ${q.category}` : "";
-
-              return (
-                <tr key={k} className={`border-t ${isDark ? "border-slate-700" : "border-slate-200"}`}>
-                  <td className={`p-3 ${isRTL ? "text-right" : "text-left"} align-top`}>
-                    <div className="font-semibold">{questionText}</div>
-                    <div className="text-xs opacity-70">{k}{category}</div>
-                  </td>
-                  <td className="p-3 text-center font-semibold align-top">{v}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  // ✅ סימולציה מהשרת (title/text/reflection)
   const scenario = data?.simulation?.scenario || null;
-  const scenarioTitle = scenario?.title || (lang === "he" ? "ללא כותרת" : "Untitled");
-  const scenarioText = scenario?.text || "—";
-  const scenarioReflection = Array.isArray(scenario?.reflection) ? scenario.reflection : [];
 
   return (
     <div
       dir={isRTL ? "rtl" : "ltr"}
       lang={lang}
       className={`flex flex-col min-h-screen w-screen ${
-        isDark ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-800"
+        isDark ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-800"
       }`}
     >
-      {/* Header */}
+      {/* Header - תמיד מוצג */}
       <div className="px-4 mt-4">
         <AdminHeader />
       </div>
 
       {/* Body */}
       <main className="flex-1 w-full px-4 py-6">
-        <div className={`${isDark ? "bg-slate-700" : "bg-slate-200"} p-6 rounded`}>
-          {!ready ? (
-            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>Loading…</div>
-          ) : (
-            <>
-              {/* Title + Back */}
-              <div className="flex items-start justify-between gap-3 mb-5">
-                <div className="flex flex-col gap-1">
-                  <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-800"}`}>
-                    {t("title")}
-                  </h1>
-                  <p className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>
-                    {t("subtitle")} <span className="font-mono">({anonId})</span>
-                  </p>
-                </div>
-
-                <button
-                  onClick={back}
-                  className={`px-4 py-2 rounded-lg font-semibold text-sm border transition ${
-                    isDark
-                      ? "bg-slate-900 border-slate-600 hover:bg-slate-800 text-gray-200"
-                      : "bg-white border-slate-300 hover:bg-slate-100 text-slate-700"
-                  }`}
-                >
-                  {t("buttons.back")}
-                </button>
-              </div>
-
-              {/* States */}
-              {loading ? (
-                <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.loading")}</div>
-              ) : error ? (
-                <div className="text-red-400">{error}</div>
-              ) : !data ? (
-                <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.empty")}</div>
-              ) : (
+        {/* Title + Back - תמיד מוצג */}
+        <div
+          className={`rounded-2xl border shadow-sm px-6 py-5 mb-6 flex items-start justify-between gap-3 ${
+            isDark ? "bg-slate-800/70 border-slate-700" : "bg-white border-slate-200"
+          }`}
+        >
+          <div className="flex flex-col gap-1">
+            <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-800"}`}>
+              {ready ? t("title") : "Loading…"}
+            </h1>
+            <p className={`text-sm ${isDark ? "text-gray-300" : "text-slate-500"}`}>
+              {ready ? t("subtitle") : ""}
+              {anonId ? (
                 <>
-                  {/* 1) Participant */}
-                  <Card title={t("sections.participant")} isDark={isDark}>
-                    <div className="space-y-3">
-                      <KV label={t("fields.email")} value={data.participant?.email || "—"} isRTL={isRTL} />
-                      <KV label={t("fields.anonId")} value={data.anonId || "—"} isRTL={isRTL} />
-
-                      <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="space-y-2">
-                          <KV label={t("fields.gender")} value={data.participant?.demographics?.gender || "—"} isRTL={isRTL} />
-                          <KV label={t("fields.ageRange")} value={data.participant?.demographics?.ageRange || "—"} isRTL={isRTL} />
-                        </div>
-                        <div className="space-y-2">
-                          <KV label={t("fields.fieldOfStudy")} value={data.participant?.demographics?.fieldOfStudy || "—"} isRTL={isRTL} />
-                          <KV label={t("fields.semester")} value={data.participant?.demographics?.semester || "—"} isRTL={isRTL} />
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* 2) Trial Info */}
-                  <Card title={t("sections.trialInfo")} isDark={isDark}>
-                    <div className="space-y-3">
-                      <KV label={t("fields.groupType")} value={groupType} isRTL={isRTL} />
-                      <KV label={t("fields.group")} value={data.trialInfo?.group || "—"} isRTL={isRTL} />
-                      <KV label={t("fields.scenarioId")} value={data.trialInfo?.scenarioId || "—"} isRTL={isRTL} />
-                      <KV label={t("fields.assignedAt")} value={fmtDateTime(data.trialInfo?.assignedAt, locale)} isRTL={isRTL} />
-                    </div>
-                  </Card>
-
-                  {/* 3) Timeline */}
-                  <Card title={t("sections.timeline")} isDark={isDark}>
-                    <div className="space-y-3">
-                      <KV label={t("fields.processStartedAt")} value={fmtDateTime(data.timeline?.processStartedAt, locale)} isRTL={isRTL} />
-                      <KV label={t("fields.processEndedAt")} value={fmtDateTime(data.timeline?.processEndedAt, locale)} isRTL={isRTL} />
-                      <KV label={t("fields.processDuration")} value={fmtDuration(data.timeline?.processDurationSec)} isRTL={isRTL} />
-
-                      <hr className={`${isDark ? "border-slate-700" : "border-slate-200"} my-2`} />
-
-                      <KV label={t("fields.simStartedAt")} value={fmtDateTime(data.timeline?.simulationStartedAt, locale)} isRTL={isRTL} />
-                      <KV label={t("fields.simEndedAt")} value={fmtDateTime(data.timeline?.simulationEndedAt, locale)} isRTL={isRTL} />
-                      <KV label={t("fields.simDuration")} value={fmtDuration(data.timeline?.simulationDurationSec)} isRTL={isRTL} />
-
-                      {isExperimental && (
-                        <>
-                          <hr className={`${isDark ? "border-slate-700" : "border-slate-200"} my-2`} />
-                          <KV label={t("fields.chatStartedAt")} value={fmtDateTime(data.timeline?.chatStartedAt, locale)} isRTL={isRTL} />
-                          <KV label={t("fields.chatEndedAt")} value={fmtDateTime(data.timeline?.chatEndedAt, locale)} isRTL={isRTL} />
-                          <KV label={t("fields.chatDuration")} value={fmtDuration(data.timeline?.chatDurationSec)} isRTL={isRTL} />
-                        </>
-                      )}
-                    </div>
-                  </Card>
-
-                  {/* 4) CASEL PRE */}
-                  <Card title={t("sections.caselPre")} isDark={isDark}>
-                    {!data.casel?.pre ? (
-                      <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                    ) : (
-                      <div className="space-y-3">
-                        <KV label={t("fields.lang")} value={data.casel.pre.lang || "—"} isRTL={isRTL} />
-                        <KV label={t("fields.startedAt")} value={fmtDateTime(data.casel.pre.startedAt, locale)} isRTL={isRTL} />
-                        <KV label={t("fields.endedAt")} value={fmtDateTime(data.casel.pre.endedAt, locale)} isRTL={isRTL} />
-                        <KV label={t("fields.completedAt")} value={fmtDateTime(data.casel.pre.completedAt, locale)} isRTL={isRTL} />
-
-                        <div className="pt-2">
-                          <div className="font-semibold mb-2">
-                            {lang === "he" ? "תשובות + שאלות השאלון" : "Answers + Questionnaire Questions"}
-                          </div>
-                          {renderCaselAnswersTable(data.casel.pre.answers || []) || (
-                            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-
-                  {/* 5) Simulation + AI Analysis (רק מה שצריך: סימולציה + כרטיסיות) */}
-                  <Card title={t("sections.simulation")} isDark={isDark}>
-                    <div className="space-y-4">
-                      {/* ✅ הסימולציה עצמה */}
-                      <div>
-                        <div className="font-semibold mb-2">{lang === "he" ? "הסימולציה" : "Simulation"}</div>
-
-                        {/* כותרת */}
-                        <div className={`rounded-lg border p-4 mb-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                          <div className="text-lg font-bold mb-2">{scenarioTitle}</div>
-                          <div className="whitespace-pre-wrap leading-relaxed">{scenarioText}</div>
-                        </div>
-<div className="mt-4">
-  <div className="font-semibold mb-2">
-    {lang === "he" ? "שאלות רפלקציה" : "Reflection Questions"}
-  </div>
-
-  <div
-    className={`rounded-lg border p-4 ${
-      isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"
-    }`}
-  >
-    {scenarioReflection.length === 0 ? (
-      <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-    ) : (
-      <ul className="list-disc ps-6 space-y-2">
-        {scenarioReflection.map((q, idx) => (
-          <li key={idx} className="break-words leading-relaxed">
-            {q}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-</div>
-                      </div>
-
-                      {/* ✅ הכרטיסיות היפות (AnswerCard) – בלי להציג תשובה עוד פעם למעלה */}
-                      <div className="-mx-4">
-                        <AnswerCard
-                          isDark={isDark}
-                          // ✅ זה גורם ל-AnswerCard להציג "הסימולציה עצמה" בתוך הכרטיס במקום לחזור על תשובה.
-                          // אם ב-AnswerCard עדיין מופיע "התשובה שלך" עם טקסט, תתקני שם: להסתיר את בלוק ה-answerText כשhideAnswerText=true
-                          answer={{
-                            answerText: (data.simulation?.answers || []).slice(-1)[0] || "",
-                            analysisResult: data.simulation?.aiAnalysisJson || {},
-                            submittedAt: data.timeline?.simulationEndedAt || data.timeline?.processEndedAt,
-                            // optional flag (אם תרצי לתמוך בזה ב-AnswerCard)
-                            hideAnswerText: true,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </Card>
-
-                  {/* 6) Socratic Chat (Experimental only) */}
-                  <Card title={t("sections.socraticChat")} isDark={isDark}>
-                    {!isExperimental || !data.socraticChat ? (
-                      <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.notExperimental")}</div>
-                    ) : (
-                      <div className="space-y-4">
-                      {/* ✅ session time cards */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-  <div
-    className={`rounded-lg border p-3 ${
-      isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"
-    }`}
-  >
-    <div className="text-xs opacity-70">
-      {lang === "he" ? "תחילת השיחה" : "Chat start"}
-    </div>
-    <div className="text-lg font-bold">
-      {fmtDateTime(chatFirstTs, locale)}
-    </div>
-  </div>
-
-  <div
-    className={`rounded-lg border p-3 ${
-      isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"
-    }`}
-  >
-    <div className="text-xs opacity-70">
-      {lang === "he" ? "סוף השיחה" : "Chat end"}
-    </div>
-    <div className="text-lg font-bold">
-      {fmtDateTime(chatLastTs, locale)}
-    </div>
-  </div>
-
-  <div
-    className={`rounded-lg border p-3 ${
-      isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"
-    }`}
-  >
-    <div className="text-xs opacity-70">
-      {lang === "he" ? "משך השיחה" : "Chat duration"}
-    </div>
-    <div className="text-lg font-bold">
-      {fmtDuration(chatDurationSecUi)}
-    </div>
-  </div>
-</div>
-                        {/* stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                          <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                            <div className="text-xs opacity-70">{t("fields.turns")}</div>
-                            <div className="text-lg font-bold">{data.socraticChat.chatStats?.turns ?? "—"}</div>
-                          </div>
-                          <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                            <div className="text-xs opacity-70">{t("fields.studentTurns")}</div>
-                            <div className="text-lg font-bold">{data.socraticChat.chatStats?.studentTurns ?? "—"}</div>
-                          </div>
-                          <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                            <div className="text-xs opacity-70">{t("fields.aiTurns")}</div>
-                            <div className="text-lg font-bold">{data.socraticChat.chatStats?.aiTurns ?? "—"}</div>
-                          </div>
-                        </div>
-
-                        {/* messages */}
-                        <div>
-                          <div className="font-semibold mb-2">{t("fields.messages")}</div>
-                          {(data.socraticChat.messages || []).length === 0 ? (
-                            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                          ) : (
-                            <div className="space-y-2">
-{data.socraticChat.messages
-  .filter(m => m.text !== "__CHAT_SESSION_START__")
-  .map((m, idx) => (                                <div
-                                  key={idx}
-                                  className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}
-                                >
-                                  <div className="flex items-center justify-between gap-3 mb-1">
-                                    <div className="text-xs font-semibold opacity-80">
-                                      {m.sender === "ai" ? t("labels.ai") : t("labels.student")}
-                                    </div>
-                                    <div className="text-xs opacity-60">{fmtDateTime(m.timestamp, locale)}</div>
-                                  </div>
-                                  <div className="text-sm whitespace-pre-wrap break-words">{m.text}</div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* summary + recommendations */}
-                        <div>
-                          <div className="font-semibold mb-2">{t("fields.chatSummary")}</div>
-                          <div className={`rounded-lg border p-3 whitespace-pre-wrap ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                            {data.socraticChat.aiConversationSummary || "—"}
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="font-semibold mb-2">{t("fields.recommendations")}</div>
-                          {(data.socraticChat.aiRecommendations || []).length === 0 ? (
-                            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                          ) : (
-                            <ul className="list-disc ps-6 space-y-1">
-                              {data.socraticChat.aiRecommendations.map((r, idx) => (
-                                <li key={idx}>{r}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-
-                        <div>
-                          <div className="font-semibold mb-2">{t("fields.finalReflection")}</div>
-                          {!data.socraticChat.finalReflection ? (
-                            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                          ) : (
-                            <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                              <div className="text-xs opacity-70 mb-2">
-                                {fmtDateTime(data.socraticChat.finalReflection.submittedAt, locale)}
-                              </div>
-                              <div className="text-sm whitespace-pre-wrap break-words">
-                                <span className="font-semibold">{t("fields.insight")}:</span>{" "}
-                                {data.socraticChat.finalReflection.insight}
-                                {"\n"}
-                                <span className="font-semibold">{t("fields.usefulness")}:</span>{" "}
-                                {data.socraticChat.finalReflection.usefulness}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-
-                  {/* 7) CASEL POST */}
-                  <Card title={t("sections.caselPost")} isDark={isDark}>
-                    {!data.casel?.post ? (
-                      <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                    ) : (
-                      <div className="space-y-3">
-                        <KV label={t("fields.lang")} value={data.casel.post.lang || "—"} isRTL={isRTL} />
-                        <KV label={t("fields.startedAt")} value={fmtDateTime(data.casel.post.startedAt, locale)} isRTL={isRTL} />
-                        <KV label={t("fields.endedAt")} value={fmtDateTime(data.casel.post.endedAt, locale)} isRTL={isRTL} />
-                        <KV label={t("fields.completedAt")} value={fmtDateTime(data.casel.post.completedAt, locale)} isRTL={isRTL} />
-
-                        <div className="pt-2">
-                          <div className="font-semibold mb-2">
-                            {lang === "he" ? "תשובות + שאלות השאלון" : "Answers + Questionnaire Questions"}
-                          </div>
-                          {renderCaselAnswersTable(data.casel.post.answers || []) || (
-                            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </Card>
-
-                  {/* 8) UEQ */}
-                  <Card title={t("sections.ueq")} isDark={isDark}>
-                    {!data.ueq ? (
-                      <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                    ) : (
-                      <div className="space-y-4">
-                        <KV label={t("fields.createdAt")} value={fmtDateTime(data.ueq.createdAt, locale)} isRTL={isRTL} />
-                        <KV label={t("fields.lang")} value={data.ueq.lang || "—"} isRTL={isRTL} />
-
-                        <div>
-                          <div className="font-semibold mb-2">{t("fields.ueqScores")}</div>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                              <div className="text-xs opacity-70">{t("fields.pragmatic")}</div>
-                              <div className="text-lg font-bold">{data.ueq.scores?.pragmaticScore ?? "—"}</div>
-                            </div>
-                            <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                              <div className="text-xs opacity-70">{t("fields.hedonic")}</div>
-                              <div className="text-lg font-bold">{data.ueq.scores?.hedonicScore ?? "—"}</div>
-                            </div>
-                            <div className={`rounded-lg border p-3 ${isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"}`}>
-                              <div className="text-xs opacity-70">{t("fields.overall")}</div>
-                              <div className="text-lg font-bold">{data.ueq.scores?.overallScore ?? "—"}</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="font-semibold mb-2">
-                            {lang === "he" ? "תשובות + פריטים" : "Responses + Items"}
-                          </div>
-                          {renderUeqTable() || (
-                            <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.noData")}</div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </Card>
+                  {" "}
+                  <span
+                    className={`font-mono text-xs px-1.5 py-0.5 rounded ${
+                      isDark ? "bg-slate-700 text-slate-300" : "bg-slate-100 text-slate-600"
+                    }`}
+                  >
+                    ({anonId})
+                  </span>
                 </>
-              )}
-            </>
-          )}
+              ) : null}
+            </p>
+          </div>
+
+          <button
+            onClick={back}
+            className={`px-4 py-2 rounded-lg font-semibold text-sm border transition-all hover:shadow-sm active:scale-95 ${
+              isDark
+                ? "bg-slate-700 border-slate-600 hover:bg-slate-600 text-gray-200"
+                : "bg-white border-slate-300 hover:bg-slate-50 text-slate-700"
+            }`}
+          >
+            {ready ? t("buttons.back") : "Back"}
+          </button>
         </div>
+
+        {/* States (כמו בקוד הישן) */}
+        {!ready ? (
+          <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>Loading…</div>
+        ) : loading ? (
+          <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.loading")}</div>
+        ) : error ? (
+          <div
+            className={`rounded-xl border px-5 py-4 text-sm font-medium ${
+              isDark
+                ? "bg-red-900/20 border-red-800 text-red-400"
+                : "bg-red-50 border-red-200 text-red-600"
+            }`}
+          >
+            {error}
+          </div>
+        ) : !data ? (
+          <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("states.empty")}</div>
+        ) : (
+          <>
+            <SectionLabel label={lang === "he" ? "מידע כללי" : "General Info"} isDark={isDark} />
+
+            <ParticipantSection t={t} isDark={isDark} isRTL={isRTL} data={data} />
+
+            <TrialTimelineSection
+              t={t}
+              isDark={isDark}
+              isRTL={isRTL}
+              locale={locale}
+              data={data}
+              groupType={groupType}
+              isExperimental={isExperimental}
+              fmtDateTime={fmtDateTime}
+              fmtDuration={fmtDuration}
+            />
+
+            <SectionLabel label={lang === "he" ? "שאלוני CASEL" : "CASEL Questionnaires"} isDark={isDark} />
+
+            <CaselSection
+              type="pre"
+              t={t}
+              lang={lang}
+              isDark={isDark}
+              isRTL={isRTL}
+              locale={locale}
+              data={data}
+              averages={caselPreAverages}
+              fmtDateTime={fmtDateTime}
+              renderCaselAnswersTable={renderCaselAnswersTable}
+            />
+
+            <SectionLabel label={lang === "he" ? "סימולציה" : "Simulation"} isDark={isDark} />
+
+            <SimulationSection
+              t={t}
+              isDark={isDark}
+              lang={lang}
+              scenarioTitle={scenario?.title}
+              scenarioText={scenario?.text}
+              scenarioReflection={scenario?.reflection}
+              data={data}
+            />
+
+            <SectionLabel label={lang === "he" ? "שיחה סוקרטית" : "Socratic Chat"} isDark={isDark} />
+
+            <SocraticChatSection
+              t={t}
+              lang={lang}
+              isDark={isDark}
+              data={data}
+              isExperimental={isExperimental}
+              locale={locale}
+              fmtDateTime={fmtDateTime}
+              fmtDuration={fmtDuration}
+            />
+
+            <SectionLabel label={lang === "he" ? "שאלוני POST" : "POST Questionnaires"} isDark={isDark} />
+
+            <CaselSection
+              type="post"
+              t={t}
+              lang={lang}
+              isDark={isDark}
+              isRTL={isRTL}
+              locale={locale}
+              data={data}
+              averages={caselPostAverages}
+              fmtDateTime={fmtDateTime}
+              renderCaselAnswersTable={renderCaselAnswersTable}
+            />
+
+            <SectionLabel label="UEQ" isDark={isDark} />
+
+            <UeqSection
+              t={t}
+              isDark={isDark}
+              isRTL={isRTL}
+              locale={locale}
+              data={data}
+              fmtDateTime={fmtDateTime}
+            />
+          </>
+        )}
       </main>
 
-      {/* Footer */}
+      {/* Footer - תמיד מוצג */}
       <div className="px-4 pb-4">
         <Footer />
       </div>

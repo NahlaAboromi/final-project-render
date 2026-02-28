@@ -98,6 +98,9 @@ const AdminSessionsContent = () => {
     setGroupType("all");
   };
 
+  // ✅ NEW: Back button to /admin
+  const goBackHome = () => navigate("/admin");
+
   // ✅ RTL-safe classes for table
   const thClass = `p-3 whitespace-nowrap ${isRTL ? "text-right" : "text-left"}`;
   const tdClass = `p-3 whitespace-nowrap ${isRTL ? "text-right" : "text-left"}`;
@@ -206,11 +209,25 @@ const AdminSessionsContent = () => {
             <div className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>Loading…</div>
           ) : (
             <>
-              <div className="flex flex-col gap-1 mb-5">
-                <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-800"}`}>
-                  {t("title")}
-                </h1>
-                <p className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("subtitle")}</p>
+              {/* ✅ Title + Back */}
+              <div className="flex items-start justify-between gap-3 mb-5">
+                <div className="flex flex-col gap-1">
+                  <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-800"}`}>
+                    {t("title")}
+                  </h1>
+                  <p className={`${isDark ? "text-gray-300" : "text-slate-600"}`}>{t("subtitle")}</p>
+                </div>
+
+                <button
+                  onClick={goBackHome}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm border transition-all hover:shadow-sm active:scale-95 ${
+                    isDark
+                      ? "bg-slate-900 border-slate-600 hover:bg-slate-800 text-gray-200"
+                      : "bg-white border-slate-300 hover:bg-slate-100 text-slate-700"
+                  }`}
+                >
+                  {lang === "he" ? "חזרה" : "Back"}
+                </button>
               </div>
 
               {/* Filters */}

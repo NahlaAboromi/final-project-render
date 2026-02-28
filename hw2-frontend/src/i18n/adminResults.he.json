@@ -32,11 +32,11 @@
     "fieldOfStudy": "תחום לימוד",
     "semester": "סמסטר",
     "groupType": "קבוצה",
-    "group": "Group",
-    "scenarioId": "Scenario",
+    "group": "קבוצה",
+    "scenarioId": "סימולציה",
     "assignedAt": "assignedAt",
-    "processStartedAt": "תחילת תהליך (startedAt)",
-    "processEndedAt": "סיום תהליך (endedAt)",
+    "processStartedAt": "תחילת תהליך",
+    "processEndedAt": "סיום תהליך",
     "processDuration": "משך תהליך",
     "simStartedAt": "תחילת סימולציה",
     "simEndedAt": "סיום סימולציה",
@@ -49,11 +49,11 @@
     "completedAt": "completedAt",
     "lang": "שפה",
     "answers": "תשובות",
-    "questionKey": "שאלה (key)",
+    "questionKey": "מפתח שאלה",
     "value": "ערך",
     "simAnswers": "תשובות סימולציה",
-    "aiAnalysis": "AI Analysis (טקסט)",
-    "aiAnalysisJson": "AI Analysis (JSON)",
+    "aiAnalysis": "ניתוח AI",
+    "aiAnalysisJson": "ניתוח AI JSON",
     "turns": "סה\"כ תורות",
     "studentTurns": "תורות סטודנט",
     "aiTurns": "תורות AI",
@@ -61,14 +61,28 @@
     "chatSummary": "סיכום שיחה",
     "recommendations": "המלצות",
     "finalReflection": "רפלקציה סופית",
-    "insight": "תובנה",
-    "usefulness": "שימושיות",
     "createdAt": "createdAt",
     "ueqScores": "ציוני UEQ",
-    "pragmatic": "Pragmatic",
-    "hedonic": "Hedonic",
-    "overall": "Overall",
-    "responses": "Responses",
-    "item": "Item"
+    "pragmatic": "פרגמטי",
+    "hedonic": "הדוני",
+    "overall": "כולל",
+    "responses": "תגובות",
+    "item": "פריט"
+  },
+
+  "finalReflection": {
+
+    "title": "רפלקציה סופית",
+
+    "subtitle": "לפני שנסיים, נשמח לשמוע על החוויה שלך עם CASELy, המאמן הסוקרטי שלך",
+
+    "questions": {
+
+      "insight": "באיזו דרך השיחה הסוקרטית עזרה לך להרהר במחשבות או ברגשות שלך?",
+
+      "usefulness": "באופן כללי, האם הרגשת שהשיחה עם CASELy הייתה שימושית או משמעותית עבורך?"
+
+    }
+
   }
 }

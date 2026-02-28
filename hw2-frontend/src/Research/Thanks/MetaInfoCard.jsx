@@ -62,23 +62,42 @@ export default function MetaInfoCard({
   const closeModalOnly = () => {
     setShowModal(false);
   };
+// אישור במודאל → שמירה לשרת + ניקוי סטודנט + ניווט
+const confirmAndExit = async () => {
+  setShowModal(false);
 
-  // אישור במודאל → ניקוי סטודנט + ניווט הביתה (או onExit מבחוץ אם יש)
-  const confirmAndExit = () => {
-    setShowModal(false);
-    try {
-      clearStudent?.();
-    } catch (e) {
-      // אין הדפסות
+  const effectiveAnonId = student?.anonId || anonId;
+
+  // ✅ שליחה לשרת לשמירת הזמנים (startedAt/endedAt)
+  try {
+    if (effectiveAnonId) {
+      await fetch(`/api/trial/end-session`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          anonId: effectiveAnonId,
+          startedAt: sessionSummary?.createdAt,
+          endedAt: sessionSummary?.lastSeenAt,
+        }),
+        keepalive: true,
+      });
     }
+  } catch (e) {
+    // אפשר להתעלם (לא חוסמים יציאה)
+  }
 
-    if (typeof onExit === 'function') {
-      onExit();           // אם יש לוגיקה חיצונית – נשתמש בה
-    } else {
-      navigate('/');      // אחרת נלך למסך הראשי כמו ב־HEADER
-    }
-  };
+  // ניקוי סטודנט
+  try {
+    clearStudent?.();
+  } catch (e) {}
 
+  // ניווט
+  if (typeof onExit === "function") {
+    onExit();
+  } else {
+    navigate("/");
+  }
+};
   return (
     <>
       <div
