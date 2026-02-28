@@ -62,61 +62,236 @@ const StudentSimulation = () => {
     } else {
       navigate('/StudentHome');
     }
-  }, [classCode, navigate, t]);
+  }, [classCode, navigate]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoadingToSubmit(true);
-    try {
-      console.log('[submit] payload:', { studentId, classCode, answerText: answer });
 
-      const response1 = await fetch('/api/classes/submit-answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          studentId,
-          classCode,
-          answerText: answer
-        }),
-      });
+  console.log('\n==============================');
+  console.log('>>> HANDLE SUBMIT START');
+  console.log('timestamp:', new Date().toISOString());
 
-      const data1 = await response1.json();
+  e.preventDefault();
 
-      const response2 = await fetch('/api/studentNotifications/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          studentId: user.id,
-          type: 'submitted',
-          // ✅ טקסטים ניתנים לתרגום (ללא שינוי לוגיקה)
-          title: t('notif.title'),
-          content: t('notif.content', '').replace('{classCode}', classCode),
-          time: new Date().toLocaleString(),
-          read: false
-        }),
-      });
+  setIsLoadingToSubmit(true);
 
-      fetchNotifications();
+  try {
 
-      const data2 = await response2.json();
+    // =====================
+    // STEP 1: INPUT DEBUG
+    // =====================
 
-      if (response1.ok && response2.ok) {
-        setIsLoadingToSubmit(false);
-        setTimeout(() => {
-          showSuccessToast(t('toast.success'));
-          navigate('/simulation_result', { state: { classCode } });
-        }, 400);
-      } else {
-        setIsLoadingToSubmit(false);
-        console.error('❌ Error submitting answer:', data1.message, ' ', data2.message);
-        alert(t('errors.submitError'));
-      }
-    } catch (error) {
-      setIsLoadingToSubmit(false);
-      console.error('❌ Server error:', error);
-      alert(t('errors.serverErrorShort'));
+    console.group('[STEP 1] FRONTEND INPUT DEBUG');
+
+    console.log('studentId:', studentId, '| type:', typeof studentId);
+
+    console.log('classCode:', classCode, '| type:', typeof classCode);
+
+    console.log('answer exists?', !!answer);
+
+    console.log('answer length:', (answer || '').length);
+
+    console.log('answer preview (first 200 chars):');
+    console.log((answer || '').substring(0, 200));
+
+    console.log('answer full text:');
+    console.log(answer);
+
+    console.log('user.id:', user?.id);
+
+    console.groupEnd();
+
+
+
+    // =====================
+    // STEP 2: PREPARE BODY
+    // =====================
+
+    const requestBody = {
+      studentId,
+      classCode,
+      answerText: answer
+    };
+
+    console.group('[STEP 2] REQUEST BODY');
+
+    console.log('requestBody object:');
+    console.dir(requestBody, { depth: 5 });
+
+    console.log('requestBody JSON:');
+    console.log(JSON.stringify(requestBody, null, 2));
+
+    console.groupEnd();
+
+
+
+    // =====================
+    // STEP 3: SEND ANSWER
+    // =====================
+
+    console.group('[STEP 3] FETCH /submit-answer');
+
+    console.time('submit-answer fetch time');
+
+    const response1 = await fetch('/api/classes/submit-answer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    console.timeEnd('submit-answer fetch time');
+
+    console.log('response1.status:', response1.status);
+
+    console.log('response1.ok:', response1.ok);
+
+    console.log('response1.headers:');
+
+    for (const pair of response1.headers.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
     }
-  };
+
+    const data1 = await response1.json();
+
+    console.log('response1 JSON data:');
+    console.dir(data1, { depth: 10 });
+
+    console.groupEnd();
+
+
+
+    // =====================
+    // STEP 4: NOTIFICATION
+    // =====================
+
+    console.group('[STEP 4] FETCH /studentNotifications/create');
+
+    const notificationBody = {
+      studentId: user.id,
+      type: 'submitted',
+      title: t('notif.title'),
+      content: t('notif.content', '').replace('{classCode}', classCode),
+      time: new Date().toLocaleString(),
+      read: false
+    };
+
+    console.log('notification body:');
+    console.dir(notificationBody, { depth: 5 });
+
+    console.time('notification fetch time');
+
+    const response2 = await fetch('/api/studentNotifications/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(notificationBody),
+    });
+
+    console.timeEnd('notification fetch time');
+
+    console.log('response2.status:', response2.status);
+
+    console.log('response2.ok:', response2.ok);
+
+    const data2 = await response2.json();
+
+    console.log('response2 JSON data:');
+    console.dir(data2, { depth: 10 });
+
+    console.groupEnd();
+
+
+
+    // =====================
+    // STEP 5: REFRESH NOTIFICATIONS
+    // =====================
+
+    console.group('[STEP 5] REFRESH NOTIFICATIONS');
+
+    console.log('Calling fetchNotifications()...');
+
+    await fetchNotifications();
+
+    console.log('fetchNotifications DONE');
+
+    console.groupEnd();
+
+
+
+    // =====================
+    // STEP 6: FINAL RESULT
+    // =====================
+
+    console.group('[STEP 6] FINAL RESULT CHECK');
+
+    console.log('response1.ok:', response1.ok);
+
+    console.log('response2.ok:', response2.ok);
+
+    console.groupEnd();
+
+
+
+    if (response1.ok && response2.ok) {
+
+      console.log('✅ BOTH REQUESTS OK');
+
+      setIsLoadingToSubmit(false);
+
+      setTimeout(() => {
+
+        console.log('Showing success toast...');
+
+        showSuccessToast(t('toast.success'));
+
+        console.log('Navigating to /simulation_result');
+
+        navigate('/simulation_result', {
+          state: { classCode }
+        });
+
+        console.log('Navigation done');
+
+      }, 400);
+
+    } else {
+
+      setIsLoadingToSubmit(false);
+
+      console.error('❌ Error submitting answer');
+
+      console.error('data1.message:', data1?.message);
+
+      console.error('data2.message:', data2?.message);
+
+      alert(t('errors.submitError'));
+
+    }
+
+
+    console.log('<<< HANDLE SUBMIT END SUCCESS');
+    console.log('==============================\n');
+
+
+  } catch (error) {
+
+    setIsLoadingToSubmit(false);
+
+    console.error('\n❌ HANDLE SUBMIT CRASH');
+
+    console.error('error message:', error?.message);
+
+    console.error('error stack:', error?.stack);
+
+    console.error('<<< HANDLE SUBMIT END ERROR');
+    console.error('==============================\n');
+
+    alert(t('errors.serverErrorShort'));
+
+  }
+};
 
   const LoadingOverlay = () => (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center z-50">

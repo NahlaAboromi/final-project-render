@@ -66,50 +66,181 @@ router.get('/teacher/:teacherId', async (req, res) => {
 });
 
 router.post('/submit-answer', async (req, res) => {
+  console.log('\n==============================');
   console.log('>>> CLASSES /submit-answer HIT');
+  console.log('timestamp:', new Date().toISOString());
   const t0 = Date.now();
-  try {
-    // INPUT
-    const { studentId, classCode, answerText } = req.body || {};
-    console.group('[CLASSES] POST /submit-answer');
-    console.log('↘ body:', { studentId, classCode, answerLen: (answerText || '').length });
 
+  try {
+
+    // =====================
+    // INPUT
+    // =====================
+
+    const { studentId, classCode, answerText } = req.body || {};
+
+    console.group('[STEP 1] INPUT');
+    console.log('raw body:', req.body);
+    console.log('studentId:', studentId, '| type:', typeof studentId);
+    console.log('classCode:', classCode, '| type:', typeof classCode);
+    console.log('answerText exists?', !!answerText);
+    console.log('answerText length:', (answerText || '').length);
+    console.log('answerText preview:', (answerText || '').substring(0, 100));
+    console.groupEnd();
+
+
+    // =====================
     // FIND CLASS
+    // =====================
+
+    console.group('[STEP 2] FIND CLASS');
+
     const classDoc = await Class.findOne({ classCode });
-    console.log('class found?', !!classDoc, classDoc ? { classCode: classDoc.classCode } : null);
+
+    console.log('classDoc found?', !!classDoc);
+
+    if (classDoc) {
+      console.log('classDoc._id:', classDoc._id.toString());
+      console.log('classDoc.classCode:', classDoc.classCode);
+      console.log('classDoc.createdBy:', classDoc.createdBy);
+
+      console.log('classDoc.situation exists?', !!classDoc.situation);
+      console.log('classDoc.question exists?', !!classDoc.question);
+
+      console.log('classDoc.students exists?', Array.isArray(classDoc.students));
+      console.log('classDoc.students length:', classDoc.students?.length);
+    }
+
     if (!classDoc) {
       console.warn('⛔ class not found:', classCode);
       console.groupEnd();
       return res.status(404).json({ message: 'Class not found' });
     }
 
+    console.groupEnd();
+
+
+    // =====================
     // AI ANALYSIS
-    console.time('[analyzeStudentResponse]');
+    // =====================
+
+    console.group('[STEP 3] AI ANALYSIS');
+
+    console.log('Calling analyzeStudentResponse with:');
+
+    console.log({
+      situationLen: classDoc.situation?.length,
+      questionLen: classDoc.question?.length,
+      studentResponseLen: answerText?.length,
+      studentName: studentId
+    });
+
+    console.time('[analyzeStudentResponse TIME]');
+
     const analysisResult = await analyzeStudentResponse({
       situation: classDoc.situation,
       question: classDoc.question,
       studentResponse: answerText,
       studentName: studentId
     });
-    console.timeEnd('[analyzeStudentResponse]');
-    console.log('analysisResult keys:', analysisResult ? Object.keys(analysisResult) : null);
 
+    console.timeEnd('[analyzeStudentResponse TIME]');
+
+    console.log('analysisResult is null?', analysisResult === null);
+    console.log('analysisResult is undefined?', analysisResult === undefined);
+    console.log('analysisResult type:', typeof analysisResult);
+
+    if (analysisResult) {
+
+      console.log('analysisResult keys:', Object.keys(analysisResult));
+
+      console.log('analysisResult full object:');
+      console.dir(analysisResult, { depth: 10 });
+
+      console.log('analysisResult JSON:');
+      console.log(JSON.stringify(analysisResult, null, 2));
+
+    } else {
+
+      console.warn('⚠️ analysisResult returned EMPTY:', analysisResult);
+
+    }
+
+    console.groupEnd();
+
+
+    // =====================
     // PUSH ANSWER
-    const beforeLen = Array.isArray(classDoc.students) ? classDoc.students.length : 'N/A';
+    // =====================
+
+    console.group('[STEP 4] PUSH ANSWER');
+
+    const beforeLen = Array.isArray(classDoc.students)
+      ? classDoc.students.length
+      : 'N/A';
+
+    console.log('students length BEFORE push:', beforeLen);
+
     classDoc.students.push({
       studentId,
       answerText,
       analysisResult,
       submittedAt: new Date()
     });
-    console.log('students length:', beforeLen, '→', classDoc.students.length);
 
+    console.log('students length AFTER push:', classDoc.students.length);
+
+    console.log('last pushed student object:');
+    console.dir(classDoc.students[classDoc.students.length - 1], { depth: 10 });
+
+    console.groupEnd();
+
+
+    // =====================
     // SAVE
-    await classDoc.save();
-    console.log('✅ class saved');
+    // =====================
 
-    // NOTIFICATION
-    // NOTIFICATION - EN (קיים כמו שהיה)
+    console.group('[STEP 5] SAVE');
+
+    console.log('Saving classDoc...');
+
+    await classDoc.save();
+
+    console.log('✅ classDoc saved');
+
+    console.groupEnd();
+
+
+    // =====================
+    // VERIFY SAVE
+    // =====================
+
+    console.group('[STEP 6] VERIFY FROM DB');
+
+    const verifyDoc = await Class.findOne({ classCode });
+
+    const lastStudent =
+      verifyDoc.students[verifyDoc.students.length - 1];
+
+    console.log('Last student from DB:');
+
+    console.dir(lastStudent, { depth: 10 });
+
+    console.log('analysisResult in DB is null?',
+      lastStudent.analysisResult === null);
+
+    console.log('analysisResult in DB:',
+      lastStudent.analysisResult);
+
+    console.groupEnd();
+
+
+    // =====================
+    // NOTIFICATIONS
+    // =====================
+
+    console.group('[STEP 7] NOTIFICATIONS');
+
     const newNotification = new Notification({
       teacherId: classDoc.createdBy,
       type: 'exam',
@@ -117,30 +248,57 @@ router.post('/submit-answer', async (req, res) => {
       time: new Date().toLocaleString(),
       read: false
     });
-    await newNotification.save();
-    console.log('✅ teacher notification saved (EN)');
 
-    // ⭐ NOTIFICATION - HE (חדש)
-    const heTitle = `הסטודנט/ית ${studentId} הגיש/ה תשובה בכיתה ${classCode}`;
+    await newNotification.save();
+
+    console.log('EN notification saved, id:', newNotification._id.toString());
+
+    const heTitle =
+      `הסטודנט/ית ${studentId} הגיש/ה תשובה בכיתה ${classCode}`;
+
     const newHebrewNotification = new HebrewNotification({
-      notificationId: newNotification._id,   // קישור אחד-על-אחד לאנגלית
+      notificationId: newNotification._id,
       teacherId: classDoc.createdBy,
       type: 'exam',
       title: heTitle,
       read: false
     });
+
     await newHebrewNotification.save();
-    console.log('✅ teacher notification saved (HE)');
+
+    console.log('HE notification saved, id:',
+      newHebrewNotification._id.toString());
+
+    console.groupEnd();
+
 
     console.log('OK 200. elapsed(ms)=', Date.now() - t0);
-    console.groupEnd();
-    res.status(200).json({ message: 'Answer submitted successfully and notification saved' });
+
+    console.log('<<< END /submit-answer');
+    console.log('==============================\n');
+
+
+    res.status(200).json({
+      message: 'Answer submitted successfully and notification saved'
+    });
+
 
   } catch (error) {
-    console.error('❌ [submit-answer] ERROR:', error?.message, '\nstack:', error?.stack);
-    console.log('elapsed(ms)=', Date.now() - t0);
-    console.groupEnd?.();
+
+    console.error('\n❌❌❌ CRASH IN /submit-answer ❌❌❌');
+
+    console.error('error message:', error?.message);
+
+    console.error('error stack:');
+    console.error(error?.stack);
+
+    console.error('elapsed(ms)=', Date.now() - t0);
+
+    console.error('<<< END /submit-answer WITH ERROR');
+    console.error('==============================\n');
+
     res.status(500).json({ message: 'Server error' });
+
   }
 });
 

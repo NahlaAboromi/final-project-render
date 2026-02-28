@@ -83,97 +83,64 @@ const SimulationResult = () => {
 
     fetchAnswer();
 
-  }, [classCode, user?.id, t]);
+  }, [classCode, user?.id]);
 
 
   if (!ready) return null;
 
 
-  return (
-
-    <>
-
+return (
+  <div
+    dir={dir}
+    lang={lang}
+    className={`min-h-screen w-screen flex flex-col ${
+      isDark ? "bg-slate-900 text-white" : "bg-gray-100 text-slate-900"
+    }`}
+  >
+    {/* Header */}
+    <div className="px-4 pt-4">
       <StudentHeader />
+    </div>
 
+    {/* Content */}
+    <main className="flex-grow w-full px-4 sm:px-8 py-8">
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        {t("title")}
+      </h2>
 
-      <div
-        dir={dir}
-        lang={lang}
-        className={`w-full min-h-screen px-8 py-8 ${isDark ? 'bg-slate-900' : 'bg-gray-100'} text-black dark:text-white`}
-      >
+      {loading && <p className="text-center">{t("loading")}</p>}
 
+      {error && (
+        <div className="text-center text-red-500 mb-4">
+          {error}
+          <br />
+          <button
+            onClick={() => navigate("/StudentHome")}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+          >
+            {t("returnDashboard")}
+          </button>
+        </div>
+      )}
 
-        <h2 className="text-2xl font-bold mb-6 text-center">
+      {!loading && !error && answer && (
+        <div className="w-full">
+          <AnswerCard answer={answer} isDark={isDark} />
+        </div>
+      )}
+    </main>
 
-          {t('title')}
-
-        </h2>
-
-
-        {loading &&
-
-          <p className="text-center">
-
-            {t('loading')}
-
-          </p>
-
-        }
-
-
-        {error && (
-
-          <div className="text-center text-red-500 mb-4">
-
-            {error}
-
-            <br />
-
-            <button
-
-              onClick={() => navigate('/StudentHome')}
-
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-
-            >
-
-              {t('returnDashboard')}
-
-            </button>
-
-          </div>
-
-        )}
-
-
-        {!loading && !error && answer && (
-
-          <div className="w-full">
-
-            <AnswerCard answer={answer} isDark={isDark} />
-
-          </div>
-
-        )}
-
-      </div>
-
-
-      {user?.id &&
-
-        <StudentAIChat
-          studentId={user.id}
-          studentName={user.username}
-        />
-
-      }
-
-
+    {/* Footer */}
+    <div className="px-4 pb-4">
       <Footer />
+    </div>
 
-    </>
-
-  );
+    {/* Floating AI chat */}
+    {user?.id && (
+      <StudentAIChat studentId={user.id} studentName={user.username} />
+    )}
+  </div>
+);
 
 };
 
