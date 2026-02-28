@@ -77,10 +77,8 @@
     "subtitle": "Before we end, please share your experience with Casely, your Socratic coach",
 
     "questions": {
-
-      "insight": "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
-
-      "usefulness": "Overall, do you feel that talking with Casely was useful or meaningful to you?"
+    "insight": "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
+    "usefulness": "Overall, did you feel that the conversation with Casely was helpful or meaningful to you?"
 
     }
 

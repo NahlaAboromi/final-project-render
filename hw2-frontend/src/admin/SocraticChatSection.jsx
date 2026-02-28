@@ -37,14 +37,15 @@ const SocraticChatSection = ({
   const participantLocale = participantLang === "he" ? "he-IL" : "en-US";
 
   const finalReflectionQuestions = useMemo(() => {
-    const he = {
-      insight: "באיזו דרך השיחה הסוקרטית עזרה לך להרהר במחשבות או ברגשות שלך?",
-      usefulness: "באופן כללי, האם הרגשת שהשיחה עם CASELy הייתה שימושית או משמעותית עבורך?",
-    };
-    const en = {
-      insight: "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
-      usefulness: "Overall, do you feel that talking with Casely was useful or meaningful to you?",
-    };
+const he = {
+  insight: "באיזה אופן השיחה הסוקרטית עזרה לך להרהר במחשבות או ברגשות שלך?",
+  usefulness: "בסך הכל, האם את/ה מרגיש/ה שהשיחה עם Casely הייתה מועילה או משמעותית עבורך?",
+};
+
+const en = {
+  insight: "In what way did the Socratic conversation help you reflect on your thoughts or feelings?",
+  usefulness: "Overall, do you feel that talking with Casely was useful or meaningful to you?",
+};
     return participantLang === "he" ? he : en;
   }, [participantLang]);
 
@@ -258,8 +259,7 @@ const SocraticChatSection = ({
               </ul>
             )}
           </div>
-
-          {/* final reflection (same as old) */}
+          {/* final reflection (improved cards UI) */}
           <div>
             <div
               className={`text-xs font-semibold uppercase tracking-wide mb-2 ${
@@ -275,41 +275,120 @@ const SocraticChatSection = ({
               </div>
             ) : (
               <div
-                className={`rounded-xl border p-3 ${
+                className={`rounded-2xl border p-4 ${
                   isDark ? "border-slate-700 bg-slate-900/30" : "border-slate-200 bg-white"
                 }`}
               >
-                <div className="text-xs opacity-50 mb-2">
-                  {typeof fmtDateTime === "function"
-                    ? fmtDateTime(soc.finalReflection.submittedAt, participantLocale)
-                    : "—"}
+                {/* meta row */}
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <div className="text-sm font-semibold">
+                    {lang === "he" ? "רפלקציה סופית" : "Final Reflection"}
+                  </div>
+                  <div className="text-xs opacity-60">
+                    {typeof fmtDateTime === "function"
+                      ? fmtDateTime(soc.finalReflection.submittedAt, participantLocale)
+                      : "—"}
+                  </div>
                 </div>
 
-                <div className="text-sm break-words space-y-3">
-                  <div>
+                {/* cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {/* insight card */}
+                  <div
+                    className={`rounded-2xl border p-4 ${
+                      isDark
+                        ? "border-slate-700 bg-slate-800/30"
+                        : "border-slate-200 bg-slate-50"
+                    }`}
+                  >
                     <div
                       dir={participantIsRTL ? "rtl" : "ltr"}
-                      className={`font-semibold text-xs uppercase tracking-wide mb-1 ${
-                        isDark ? "text-slate-400" : "text-slate-500"
+                      className="flex items-start gap-2 mb-2"
+                    >
+                      <div
+                        className={`mt-0.5 h-6 w-6 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${
+                          isDark ? "bg-violet-500/20 text-violet-200" : "bg-violet-100 text-violet-700"
+                        }`}
+                      >
+                        1
+                      </div>
+
+                      <div>
+                        <div
+                          className={`text-xs font-semibold uppercase tracking-wide ${
+                            isDark ? "text-slate-300" : "text-slate-600"
+                          }`}
+                        >
+                          {participantLang === "he" ? "שאלה" : "Question"}
+                        </div>
+                        <div
+                          className={`text-sm font-semibold leading-snug ${
+                            isDark ? "text-slate-100" : "text-slate-800"
+                          }`}
+                        >
+                          {finalReflectionQuestions.insight}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      dir={participantIsRTL ? "rtl" : "ltr"}
+                      className={`rounded-xl border p-3 text-sm whitespace-pre-wrap break-words leading-relaxed ${
+                        isDark
+                          ? "border-slate-700 bg-slate-900/30 text-slate-200"
+                          : "border-slate-200 bg-white text-slate-700"
                       }`}
                     >
-                      {finalReflectionQuestions.insight}
-                    </div>
-                    <div className="whitespace-pre-wrap">
                       {soc.finalReflection.insight || "—"}
                     </div>
                   </div>
 
-                  <div className={`pt-2 border-t ${isDark ? "border-slate-700" : "border-slate-100"}`}>
+                  {/* usefulness card */}
+                  <div
+                    className={`rounded-2xl border p-4 ${
+                      isDark
+                        ? "border-slate-700 bg-slate-800/30"
+                        : "border-slate-200 bg-slate-50"
+                    }`}
+                  >
                     <div
                       dir={participantIsRTL ? "rtl" : "ltr"}
-                      className={`font-semibold text-xs uppercase tracking-wide mb-1 ${
-                        isDark ? "text-slate-400" : "text-slate-500"
+                      className="flex items-start gap-2 mb-2"
+                    >
+                      <div
+                        className={`mt-0.5 h-6 w-6 shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${
+                          isDark ? "bg-emerald-500/20 text-emerald-200" : "bg-emerald-100 text-emerald-700"
+                        }`}
+                      >
+                        2
+                      </div>
+
+                      <div>
+                        <div
+                          className={`text-xs font-semibold uppercase tracking-wide ${
+                            isDark ? "text-slate-300" : "text-slate-600"
+                          }`}
+                        >
+                          {participantLang === "he" ? "שאלה" : "Question"}
+                        </div>
+                        <div
+                          className={`text-sm font-semibold leading-snug ${
+                            isDark ? "text-slate-100" : "text-slate-800"
+                          }`}
+                        >
+                          {finalReflectionQuestions.usefulness}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      dir={participantIsRTL ? "rtl" : "ltr"}
+                      className={`rounded-xl border p-3 text-sm whitespace-pre-wrap break-words leading-relaxed ${
+                        isDark
+                          ? "border-slate-700 bg-slate-900/30 text-slate-200"
+                          : "border-slate-200 bg-white text-slate-700"
                       }`}
                     >
-                      {finalReflectionQuestions.usefulness}
-                    </div>
-                    <div className="whitespace-pre-wrap">
                       {soc.finalReflection.usefulness || "—"}
                     </div>
                   </div>
