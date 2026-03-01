@@ -133,12 +133,13 @@ app.use('/api', teacherStudentProgressRouter);
 app.use('/api/anonymous', anonymousStudentsRouter);
 
 // Export for Vercel
+// Export for Vercel (serverless)
 module.exports = app;
 
-// Local dev server
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = 5000;
+// ✅ Start server only when NOT running on Vercel serverless
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
-    console.log(`🚀 Local server running at http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
   });
 }
