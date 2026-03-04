@@ -20,7 +20,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type','Authorization','X-Teacher-Lang'], // ✅ הוספנו
   credentials: true
 }));
-app.options('*', cors()); // ✅ להוסיף
 
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
