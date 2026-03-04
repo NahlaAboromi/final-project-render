@@ -32,8 +32,8 @@ const AnonymousStartContent = () => {
         console.log("🔄 Prefetch UEQ-S HE+EN from server...");
 
         const [heRes, enRes] = await Promise.all([
-          fetch("${import.meta.env.VITE_API_URL}/api/questionnaires/ueq?lang=he", { signal: controller.signal }),
-          fetch("${import.meta.env.VITE_API_URL}/api/questionnaires/ueq?lang=en", { signal: controller.signal }),
+          fetch(`${import.meta.env.VITE_API_URL}/api/questionnaires/ueq?lang=he`, { signal: controller.signal }),
+          fetch(`${import.meta.env.VITE_API_URL}/api/questionnaires/ueq?lang=en`, { signal: controller.signal }),
         ]);
 
         if (heRes.ok) {
