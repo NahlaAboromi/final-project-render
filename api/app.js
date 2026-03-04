@@ -7,15 +7,20 @@ require('dotenv').config();
 const app = express();
 
 // --- CORS ---
-origin: [
-  'http://localhost:3000',
-  'http://localhost:5174',
-  'http://127.0.0.1:5174',
-  'https://modular-skills-assessment-tool-team11.vercel.app',
-  'https://modular-skills-assessment-tool-team-two.vercel.app',
-  'https://final-project-render-1.onrender.com',
-  'https://final-project-render-u5e7.onrender.com'
-],
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5174',
+    'http://127.0.0.1:5174',
+    'https://modular-skills-assessment-tool-team11.vercel.app',
+    'https://modular-skills-assessment-tool-team-two.vercel.app',
+    'https://final-project-render-1.onrender.com'        // ✅ FRONTEND
+  ],
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization','X-Teacher-Lang'], // ✅ הוספנו
+  credentials: true
+}));
+app.options('*', cors()); // ✅ להוסיף
 
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
