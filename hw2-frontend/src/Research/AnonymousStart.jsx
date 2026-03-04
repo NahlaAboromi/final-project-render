@@ -32,8 +32,8 @@ const AnonymousStartContent = () => {
         console.log("🔄 Prefetch UEQ-S HE+EN from server...");
 
         const [heRes, enRes] = await Promise.all([
-          fetch("/api/questionnaires/ueq?lang=he", { signal: controller.signal }),
-          fetch("/api/questionnaires/ueq?lang=en", { signal: controller.signal }),
+          fetch("${import.meta.env.VITE_API_URL}/api/questionnaires/ueq?lang=he", { signal: controller.signal }),
+          fetch("${import.meta.env.VITE_API_URL}/api/questionnaires/ueq?lang=en", { signal: controller.signal }),
         ]);
 
         if (heRes.ok) {
@@ -163,7 +163,7 @@ const order = ["email", "fieldOfStudy", "customFieldOfStudy", "semester", "gende
 
     try {
       // 1️⃣ יצירת משתמש אנונימי
-      const authRes = await fetch("/api/anonymous/auth/anonymous", {
+      const authRes = await fetch(`${import.meta.env.VITE_API_URL}/api/anonymous/auth/anonymous`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
@@ -183,7 +183,7 @@ const order = ["email", "fieldOfStudy", "customFieldOfStudy", "semester", "gende
         semester: String(form.semester || "").trim(),
       };
 
-      const demoRes = await fetch("/api/anonymous/demographics", {
+      const demoRes = await fetch(`${import.meta.env.VITE_API_URL}/api/anonymous/demographics`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -204,7 +204,7 @@ const order = ["email", "fieldOfStudy", "customFieldOfStudy", "semester", "gende
       await loadQuestionnaire({ lang });
 
       // 5️⃣ שיוך לקבוצה
-      const asgRes = await fetch("/api/assign", {
+      const asgRes = await fetch(`${import.meta.env.VITE_API_URL}/api/assign`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ anonId: serverAnonId }),

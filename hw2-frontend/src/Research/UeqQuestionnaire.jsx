@@ -177,7 +177,7 @@ const howToOkLabel    = lang === "he" ? "הבנתי" : "Got it";
 
     const scores = calculateScores();
     try {
-      await fetch("/api/ueq/assessments", {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/ueq/assessments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

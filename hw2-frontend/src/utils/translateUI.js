@@ -21,7 +21,7 @@ export async function translateUI({ sourceLang = "EN", targetLang = "HE", texts 
 
   // שלב ב: מה שחסר—נשלח לשרת בבאצ' אחד
   if (missing.length > 0) {
-    const resp = await fetch("/api/translate", {
+    const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/translate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

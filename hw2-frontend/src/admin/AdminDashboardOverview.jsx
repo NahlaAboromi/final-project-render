@@ -36,7 +36,7 @@ const AdminDashboardOverview = () => {
 
       try {
 
-        const res = await fetch("/api/admin/stats");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/stats`);
 
         const data = await res.json();
 
