@@ -66,7 +66,7 @@ function ThanksInner() {
     (async () => {
       if (group || !anonId || anonId === '—') return;
       try {
-        const r = await fetch(`/api/trial/${anonId}`);
+        const r = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/${anonId}`);
         if (!r.ok) throw new Error('Failed to load trial meta.');
         const tMeta = await r.json();
         if (ignore) return;

@@ -48,7 +48,7 @@ const VerifyCodeContent = () => {
 
     try {
       const response = await fetch(
-        role === "teacher" ? "/api/teachers/verify-code" : "/api/students/verify-code",
+        role === "teacher" ? `${import.meta.env.VITE_API_URL}/api/teachers/verify-code` : `${import.meta.env.VITE_API_URL}/api/students/verify-code`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

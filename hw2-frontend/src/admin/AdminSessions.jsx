@@ -167,7 +167,7 @@ const AdminSessionsContent = () => {
       params.set("to", to);
     }
     const qs = params.toString();
-    return `/api/admin/participants${qs ? `?${qs}` : ""}`;
+    return `${import.meta.env.VITE_API_URL}/api/admin/participants${qs ? `?${qs}` : ""}`;
   }, [groupType, assignedDate]);
 
   useEffect(() => {

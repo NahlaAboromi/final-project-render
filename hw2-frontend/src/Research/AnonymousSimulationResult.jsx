@@ -57,7 +57,7 @@ useEffect(() => {
         }
 
         // 1) Load latest answer + AI analysis
-        const res = await fetch(`/api/latest/${anonId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/latest/${anonId}`);
         if (!res.ok) throw new Error(t('failAnalysis'));
         const data = await res.json();
 
@@ -74,7 +74,7 @@ useEffect(() => {
         });
 
         // 2) Load trial meta (group) — מבקשים לפי שפה
-        const resTrial = await fetch(`/api/trial/${anonId}?lang=${encodeURIComponent(lang || 'en')}`);
+        const resTrial = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/${anonId}?lang=${encodeURIComponent(lang || 'en')}`);
         if (!resTrial.ok) throw new Error(t('failTrialMeta'));
         const tMeta = await resTrial.json();
         const g = String(tMeta.group || '').toUpperCase();

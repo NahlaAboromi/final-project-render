@@ -25,7 +25,7 @@ const handleFinish = async () => {
       let group = (student?.group || '').toString().toUpperCase();
 
       if (!group && anonId) {
-        const r = await fetch(`/api/trial/${anonId}`);
+        const r = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/${anonId}`);
         if (r.ok) {
           const t = await r.json();
           group = (t?.group || '').toString().toUpperCase();

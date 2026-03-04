@@ -43,7 +43,7 @@ export default function MetaInfoCard({
 
       let data = null;
       try {
-        const res = await fetch(`/api/anonymous/${effectiveAnonId}/session-summary`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/anonymous/${effectiveAnonId}/session-summary`);
         if (res.ok) {
           data = await res.json().catch(() => null);
         }
@@ -71,7 +71,7 @@ const confirmAndExit = async () => {
   // ✅ שליחה לשרת לשמירת הזמנים (startedAt/endedAt)
   try {
     if (effectiveAnonId) {
-      await fetch(`/api/trial/end-session`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/trial/end-session`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

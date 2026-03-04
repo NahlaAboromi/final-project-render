@@ -105,7 +105,7 @@ const handleLogout = async () => {
     let data = null;
     try {
       console.log('🟥 [AnonymousHeader] fetching session-summary ...');
-      const res = await fetch(`/api/anonymous/${student.anonId}/session-summary`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/anonymous/${student.anonId}/session-summary`);
       console.log('🟦 [AnonymousHeader] summary response status =', res.status);
       if (res.ok) {
         data = await res.json().catch(() => null);
@@ -180,7 +180,7 @@ if (student?.anonId) {
 
   // 1) שמירה ל-DB (end-session) — לבד
   try {
-    const res = await fetch(`/api/trial/end-session`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/end-session`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

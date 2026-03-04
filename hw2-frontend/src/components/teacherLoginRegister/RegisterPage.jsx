@@ -107,7 +107,7 @@ const RegisterPage = () => {
       const profilePicToSend = skipProfilePic ? "default_empty_profile_pic" : profilePicBase64;
 
       const response = await fetch(
-        role === "teacher" ? "/api/teachers/register" : "/api/students/register",
+        role === "teacher" ? `${import.meta.env.VITE_API_URL}/api/teachers/register` : `${import.meta.env.VITE_API_URL}/api/students/register`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

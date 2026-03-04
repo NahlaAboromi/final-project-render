@@ -277,7 +277,7 @@ const { mm, ss } = useElapsedTimer(viewStartAt, !submitting);
         if (!student?.anonId) {
           throw new Error('Missing anonId. Please restart the study flow.');
         }
-        const res = await fetch(`/api/trial/${student.anonId}?lang=${encodeURIComponent(lang || 'en')}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/${student.anonId}?lang=${encodeURIComponent(lang || 'en')}`);
         if (!res.ok) throw new Error('Failed to load trial');
         const data = await res.json();
         const picked = pickScenarioByLang(data.scenario, lang);

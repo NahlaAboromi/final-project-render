@@ -28,7 +28,7 @@ const DashboardOverview = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await fetch(`/api/teacher/${user?.id}/summary`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/teacher/${user?.id}/summary`);
         const data = await res.json();
         setSummary(data);
       } catch (error) {

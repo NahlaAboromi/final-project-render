@@ -29,7 +29,7 @@ const StudentReportsContent = () => {
   useEffect(() => {
     const fetchClass = async () => {
       try {
-        const res = await fetch(`/api/classes/get-class-by-code?classCode=${classCode}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/get-class-by-code?classCode=${classCode}`);
         const data = await res.json();
         setClassInfo(data);
       } catch (error) {

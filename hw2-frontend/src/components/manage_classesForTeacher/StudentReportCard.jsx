@@ -36,7 +36,7 @@ const StudentReportCard = ({ studentGroup }) => {
 
       if (missingUsername || missingPic) {
         try {
-          const res = await fetch(`/api/students/${studentId}`);
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/students/${studentId}`);
           const data = await res.json();
           if (res.ok && data) {
             setFullStudent({ ...mainStudent, ...data });

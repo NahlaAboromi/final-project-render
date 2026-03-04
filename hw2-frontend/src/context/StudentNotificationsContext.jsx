@@ -20,7 +20,7 @@ export const StudentNotificationsProvider = ({ children }) => {
      setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/studentNotifications/student/${userId}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/studentNotifications/student/${userId}`);
       const data = await response.json();
       if (!response.ok) {
            setError(`Request failed with status ${response.status}`);
@@ -47,7 +47,7 @@ export const StudentNotificationsProvider = ({ children }) => {
      setIsLoading(true);
     setError(null);
     try {
-      await fetch(`/api/studentNotifications/mark-as-read/${notificationId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/studentNotifications/mark-as-read/${notificationId}`, {
         method: 'PATCH',
       });
       await fetchNotifications();
@@ -64,7 +64,7 @@ export const StudentNotificationsProvider = ({ children }) => {
     setError(null);
     if (!userId) return; // safety check
     try {
-      await fetch(`/api/studentNotifications/mark-all-as-read/${userId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/studentNotifications/mark-all-as-read/${userId}`, {
         method: 'PATCH',
       });
       await fetchNotifications();

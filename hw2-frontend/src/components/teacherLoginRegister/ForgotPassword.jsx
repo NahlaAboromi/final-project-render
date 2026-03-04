@@ -63,8 +63,8 @@ const ForgotPasswordContent = () => {
     try {
       const response = await fetch(
         role === "teacher"
-          ? "/api/teachers/forgot-password"
-          : "/api/students/forgot-password",
+          ? `${import.meta.env.VITE_API_URL}/api/teachers/forgot-password`
+          : `${import.meta.env.VITE_API_URL}/api/students/forgot-password`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

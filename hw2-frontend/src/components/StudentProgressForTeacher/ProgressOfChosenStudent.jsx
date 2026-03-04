@@ -39,7 +39,7 @@ const ProgressOfChosenStudentContent = () => {
     async function fetchStudentData() {
       try {
         console.log(`🚀 Fetching data for student ID: ${studentId}, teacher ID: ${user?.id}`);
-        const res = await fetch(`/api/teacher/${user.id}/student/${studentId}/progress`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/teacher/${user.id}/student/${studentId}/progress`);
         if (!res.ok) throw new Error('Failed to fetch student progress data');
         const data = await res.json();
         console.log('📥 Fetched student data from API:', data);

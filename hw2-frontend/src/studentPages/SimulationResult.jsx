@@ -55,7 +55,7 @@ const SimulationResult = () => {
         console.log('[FETCH ANSWER]', { classCode, userId: user?.id });
 
         const res = await fetch(
-          `/api/classes/${encodeURIComponent(classCode)}/student/${encodeURIComponent(user.id)}`
+          `${import.meta.env.VITE_API_URL}/api/classes/${encodeURIComponent(classCode)}/student/${encodeURIComponent(user.id)}`
         );
 
         if (!res.ok) throw new Error(t('fetchFailed'));

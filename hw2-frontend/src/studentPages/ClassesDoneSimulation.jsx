@@ -33,7 +33,7 @@ const ClassManagerContent = () => {
           return;
         }
 
-        const response = await fetch(`/api/classes/get-classes-done-simulation/${userId}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/get-classes-done-simulation/${userId}`);
         const data = await response.json();
 
         if (response.ok) {

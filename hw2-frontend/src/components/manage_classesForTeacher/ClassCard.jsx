@@ -95,7 +95,7 @@ const ClassCard = ({ classData, onDeleteSuccess }) => {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/classes/delete/${classData.classCode}`, { method: 'DELETE' });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/delete/${classData.classCode}`, { method: 'DELETE' });
       const data = await response.json();
 
       if (response.ok) {

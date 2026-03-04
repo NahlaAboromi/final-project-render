@@ -37,7 +37,7 @@ const StudentSimulation = () => {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const response = await fetch(`/api/classes/get-class-by-code?classCode=${classCode}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/get-class-by-code?classCode=${classCode}`);
         const data = await response.json();
 
         if (response.ok) {

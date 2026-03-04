@@ -74,7 +74,7 @@ export const AnonymousStudentProvider = ({ children }) => {
     setSessionStart(null);
     if (anonId) {
       try {
-        await fetch(`/api/anonymous/update-last-seen/${anonId}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/anonymous/update-last-seen/${anonId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({}),
@@ -98,7 +98,7 @@ export const AnonymousStudentProvider = ({ children }) => {
     }
 
    const res = await fetch(
-     `/api/questionnaires/casel?active=true&phase=${encodeURIComponent(phase)}&lang=${encodeURIComponent(lang)}`
+     `${import.meta.env.VITE_API_URL}/api/questionnaires/casel?active=true&phase=${encodeURIComponent(phase)}&lang=${encodeURIComponent(lang)}`
     );
     if (!res.ok) throw new Error("Failed to load questionnaire");
 const data = await res.json();

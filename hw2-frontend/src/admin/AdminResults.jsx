@@ -171,7 +171,7 @@ const AdminResultsContent = () => {
   const [error, setError] = useState("");
 
   const url = useMemo(
-    () => `/api/admin/results/${encodeURIComponent(anonId || "")}`,
+    () => `${import.meta.env.VITE_API_URL}/api/admin/results/${encodeURIComponent(anonId || "")}`,
     [anonId]
   );
 

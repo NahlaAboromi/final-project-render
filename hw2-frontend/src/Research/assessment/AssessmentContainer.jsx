@@ -53,7 +53,7 @@ const [isComplete, setIsComplete] = useState(false);
 
       try {
         const r = await fetch(
-          `/api/assessments/status?anonId=${encodeURIComponent(student.anonId)}&phase=${encodeURIComponent(phase)}`
+          `${import.meta.env.VITE_API_URL}/api/assessments/status?anonId=${encodeURIComponent(student.anonId)}&phase=${encodeURIComponent(phase)}`
         );
         const s = r.ok ? await r.json() : { completed: false };
         if (cancelled) return;

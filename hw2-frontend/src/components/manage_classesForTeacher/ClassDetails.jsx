@@ -35,7 +35,7 @@ const ClassDetailsContent = () => {
 
   useEffect(() => {
     const fetchClassInfo = async () => {
-      const url = `/api/classes/get-class-by-code?classCode=${classCode}`;
+      const url = `${import.meta.env.VITE_API_URL}/api/classes/get-class-by-code?classCode=${classCode}`;
       console.groupCollapsed('[ClassDetails] fetchClassInfo');
       console.log('request url:', url);
 

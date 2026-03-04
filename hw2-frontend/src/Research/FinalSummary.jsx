@@ -50,7 +50,7 @@ useEffect(() => {
         if (!anonId) { setErr(t('missingAnonId')); setLoading(false); return; }
         setLoading(true); setErr('');
 
-        const resp = await fetch(`/api/trial/summary/${encodeURIComponent(anonId)}`, {
+        const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/summary/${encodeURIComponent(anonId)}`, {
           method: 'GET'
         });
         const data = await resp.json();

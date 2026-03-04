@@ -35,7 +35,7 @@ const ClassManagerContent = () => {
           setLoading(false);
           return;
         }
-        const response = await fetch(`/api/classes/teacher/${user.id}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/teacher/${user.id}`);
         const data = await response.json();
 
         if (response.ok) {

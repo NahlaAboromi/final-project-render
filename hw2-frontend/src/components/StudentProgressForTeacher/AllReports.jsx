@@ -28,7 +28,7 @@ const AllReportsContent = () => {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/student-progress/${user.id}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/student-progress/${user.id}`);
         const data = await response.json();
         console.log('Fetched students data:', data);
         setStudents(data);

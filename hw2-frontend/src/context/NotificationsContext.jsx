@@ -31,7 +31,7 @@ const fetchNotifications = async () => {
   setIsLoading(true);
     setError(null);
   try {
-    const response = await fetch(`/api/notifications/teacher/${userId}?lang=${lang}`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/teacher/${userId}?lang=${lang}`);
 
     const data = await response.json();
     setNotifications(data || []);
@@ -50,7 +50,7 @@ const fetchNotifications = async () => {
     setError(null);
     try {
       // Send request to mark notification as read
-      await fetch(`/api/notifications/mark-as-read/${notificationId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/mark-as-read/${notificationId}`, {
         method: 'PATCH',
       });
       fetchNotifications(); // Refresh notifications
@@ -67,7 +67,7 @@ const fetchNotifications = async () => {
     setError(null);
     try {
       // Send request to mark all notifications as read
-      await fetch(`/api/notifications/mark-all-as-read/${userId}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/mark-all-as-read/${userId}`, {
         method: 'PATCH',
       });
       fetchNotifications(); // Refresh notifications
