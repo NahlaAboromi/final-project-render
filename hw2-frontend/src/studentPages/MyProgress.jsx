@@ -175,7 +175,7 @@ const MyProgress = () => {
       setIsExporting(false);
 
       // Create export notification for the student
-      await fetch('/api/studentNotifications/create', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/studentNotifications/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

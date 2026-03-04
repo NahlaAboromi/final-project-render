@@ -70,7 +70,7 @@ const AIChat = ({ teacherId }) => {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/claude/chat-insight', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/claude/chat-insight`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

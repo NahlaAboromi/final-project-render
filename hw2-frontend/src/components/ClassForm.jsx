@@ -116,7 +116,7 @@ const language = lang === 'he' ? 'he' : 'en';
       : formData.topic;
 
     try {
-      const response = await fetch('/api/claude/generate-situation', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/claude/generate-situation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' ,
           'X-Teacher-Lang': language,
@@ -163,7 +163,7 @@ const language = lang === 'he' ? 'he' : 'en';
         ? formData.customTopic.trim()
         : formData.topic;
 
-      const classResponse = await fetch('/api/classes/create', {
+      const classResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -180,7 +180,7 @@ const language = lang === 'he' ? 'he' : 'en';
       if (!classResponse.ok) throw new Error(classData.message || 'Error creating class');
 
       // Notifications (נשאר באנגלית כדי לא לשנות לוגיקה/פורמט קיים)
-      await fetch('/api/notifications/create', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -210,7 +210,7 @@ const titleEn = isCodeExists
 const titleHe = isCodeExists
     ? 'יצירת הכיתה נכשלה: קוד הכיתה כבר קיים. נא לבחור קוד אחר.'
     : `יצירת הכיתה נכשלה: ${rawMessage}`;
-      await fetch('/api/notifications/create', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/notifications/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

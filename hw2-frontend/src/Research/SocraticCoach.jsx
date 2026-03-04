@@ -155,7 +155,7 @@ const canType = useMemo(
       setError('');
       setChatLoading(true);
 
-      const res = await fetch('/api/trial/chat/send', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/chat/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -204,7 +204,7 @@ const reply = Array.isArray(replyRaw)
       setMessages((prev) => [...prev, { role: 'user', text, ts: nowIso }]);
       setInput('');
 
-      const res = await fetch('/api/trial/chat/send', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/chat/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -240,7 +240,7 @@ async function doFinish() {
 
     if (!anonId) throw new Error(t('missingAnonId'));
 
-    const resp = await fetch('/api/trial/summary/final', {
+    const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/summary/final`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ anonId, maxTokens: 600 })

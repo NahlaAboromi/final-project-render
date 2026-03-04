@@ -10,7 +10,7 @@ import { useI18n } from '../utils/i18n';
 // 🔹 פונקציה שמתחילה trial ושומרת זמן התחלה בלוקאל
 async function startTrial(anonId) {
   try {
-    const res = await fetch('/api/trial/start', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/start`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ anonId }),
@@ -375,7 +375,7 @@ const { mm, ss } = useElapsedTimer(viewStartAt, !submitting);
 
       const payload = { answers: [freeAnswer?.trim() || ''] };
 
-      const response1 = await fetch('/api/submit-answer', {
+      const response1 = await fetch(`${import.meta.env.VITE_API_URL}/api/submit-answer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -392,7 +392,7 @@ const { mm, ss } = useElapsedTimer(viewStartAt, !submitting);
       }
       console.log('✅ AI analysis result:', data1.analysisResult);
 
-      await fetch('/api/trial/finish', {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/trial/finish`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

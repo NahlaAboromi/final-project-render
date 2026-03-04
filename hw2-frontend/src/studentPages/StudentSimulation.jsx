@@ -132,7 +132,7 @@ const StudentSimulation = () => {
 
     console.time('submit-answer fetch time');
 
-    const response1 = await fetch('/api/classes/submit-answer', {
+    const response1 = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/submit-answer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -181,7 +181,7 @@ const StudentSimulation = () => {
 
     console.time('notification fetch time');
 
-    const response2 = await fetch('/api/studentNotifications/create', {
+    const response2 = await fetch(`${import.meta.env.VITE_API_URL}/api/studentNotifications/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

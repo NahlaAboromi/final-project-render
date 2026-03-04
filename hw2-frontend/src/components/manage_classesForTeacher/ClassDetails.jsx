@@ -75,7 +75,7 @@ const ClassDetailsContent = () => {
 
     try {
       const t0 = performance.now();
-      const res = await fetch('/api/classes/ai-class-insight', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/classes/ai-class-insight`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ classCode })

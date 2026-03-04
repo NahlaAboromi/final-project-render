@@ -69,8 +69,8 @@ const AIChat = ({ studentId, studentName }) => {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/claude/student-chat-insight', {
-        method: 'POST',
+const res = await fetch(`${import.meta.env.VITE_API_URL}/api/claude/student-chat-insight`, {
+          method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           studentId,

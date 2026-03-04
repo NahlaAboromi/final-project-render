@@ -349,7 +349,7 @@ const [isComplete, setIsComplete] = useState(false);
           })),
         };
 
-        const resp = await fetch('/api/assessments', {
+        const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/assessments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

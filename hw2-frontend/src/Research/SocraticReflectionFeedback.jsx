@@ -47,7 +47,7 @@ export default function SocraticReflectionEnd() {
       setErr('');
       if (!anonId) throw new Error('missing_anonId');
 
-      const res = await fetch('/api/trial/final-reflection', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/trial/final-reflection`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
